@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian Internal Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --surface-2: #f9fafb;
+  --border: #e2e6ea;
+  --border-strong: #c8ced6;
+  --ink: #1c2333;
+  --ink-2: #4a5568;
+  --ink-3: #8a95a3;
+  --blue: #2563eb;
+  --blue-pale: #eff4ff;
+  --blue-mid: #bfcffb;
+  --green: #16a34a;
+  --green-pale: #f0fdf4;
+  --green-mid: #86efac;
+  --amber: #d97706;
+  --amber-pale: #fffbeb;
+  --red: #dc2626;
+  --red-pale: #fef2f2;
+  --accent: #1e3a5f;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  min-height: 100vh;
+}
+
+/* ── Layout ── */
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── Top nav ── */
+.topnav {
+  background: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 52px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+.nav-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  letter-spacing: 0.3px;
+  color: white;
+}
+
+.nav-logo span { opacity: 0.6; font-size: 12px; margin-left: 10px; font-family: 'DM Sans', sans-serif; font-weight: 300; letter-spacing: 1px; }
+
+.nav-right { display: flex; align-items: center; gap: 20px; font-size: 13px; opacity: 0.8; }
+.nav-user { display: flex; align-items: center; gap: 8px; }
+.nav-avatar { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
+
+/* ── Announcement banner ── */
+.announcement {
+  display: none;
+  position: relative;
+  z-index: 150;
+}
+
+.announcement.visible { display: block; }
+
+.announcement-inner {
+  padding: 0 32px;
+}
+
+/* ── Main body ── */
+.main-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 220px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  flex-shrink: 0;
+}
+
+.sidebar-section {
+  margin-bottom: 24px;
+}
+
+.sidebar-label {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 0 20px;
+  margin-bottom: 6px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-item:hover { background: var(--bg); }
+.sidebar-item.active { background: var(--blue-pale); color: var(--blue); border-left-color: var(--blue); font-weight: 500; }
+.sidebar-icon { font-size: 15px; opacity: 0.7; }
+
+/* ── Content area ── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 32px 60px;
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── Page header ── */
+.page-header { margin-bottom: 24px; }
+.page-header h2 { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--ink); margin-bottom: 4px; }
+.page-header p { color: var(--ink-3); font-size: 13.5px; }
+
+/* ── Cards ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+
+.card-header {
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+.card-subtitle { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.card-body { padding: 20px; }
+
+/* ── ERG cards ── */
+.erg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.erg-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  transition: box-shadow 0.15s;
+}
+
+.erg-card:hover { box-shadow: var(--shadow-md); }
+
+.erg-icon { font-size: 24px; margin-bottom: 8px; }
+.erg-name { font-size: 13.5px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.erg-desc { font-size: 12px; color: var(--ink-2); line-height: 1.5; margin-bottom: 10px; }
+.erg-meta { display: flex; gap: 12px; }
+.erg-stat { font-size: 11px; color: var(--ink-3); }
+.erg-stat strong { color: var(--ink-2); }
+
+/* ── Program list ── */
+.program-list { display: flex; flex-direction: column; gap: 10px; }
+
+.program-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.program-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.program-name { font-size: 13.5px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+.program-desc { font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.badge-green { background: var(--green-pale); color: var(--green); }
+.badge-blue  { background: var(--blue-pale);  color: var(--blue); }
+.badge-amber { background: var(--amber-pale); color: var(--amber); }
+
+/* ── Continue button ── */
+.continue-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.continue-hint { font-size: 12.5px; color: var(--ink-3); }
+
+.btn-primary {
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+.btn-primary:disabled { background: var(--border-strong); color: var(--ink-3); cursor: not-allowed; transform: none; }
+
+/* ── Announcement styles ── */
+/* High alignment — warning/serious tone */
+.banner-high {
+  background: #1c2333;
+  color: white;
+  border-bottom: 3px solid #dc2626;
+}
+
+.banner-high .banner-content { padding: 0; }
+
+.banner-high .banner-header {
+  background: #dc2626;
+  padding: 8px 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.banner-high .banner-body {
+  padding: 20px 32px 18px;
+}
+
+.banner-high .banner-from {
+  font-size: 11px;
+  opacity: 0.5;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.banner-high .banner-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.banner-high .banner-text {
+  font-size: 13.5px;
+  line-height: 1.75;
+  opacity: 0.85;
+  max-width: 780px;
+}
+
+.banner-high .banner-text p { margin-bottom: 8px; }
+
+/* Low alignment — neutral/reassuring tone */
+.banner-low {
+  background: #f0f7ff;
+  border-bottom: 3px solid var(--blue);
+  color: var(--ink);
+}
+
+.banner-low .banner-header {
+  background: var(--blue);
+  color: white;
+  padding: 8px 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.banner-low .banner-body {
+  padding: 20px 32px 18px;
+}
+
+.banner-low .banner-from {
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.banner-low .banner-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.banner-low .banner-text {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--ink-2);
+  max-width: 780px;
+}
+
+.banner-low .banner-text p { margin-bottom: 8px; }
+
+/* ── Allocation task (Phase 3) ── */
+.budget-sticky {
+  position: sticky;
+  top: 52px;
+  z-index: 100;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 20px 12px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.budget-track-wrap { flex: 1; }
+
+.budget-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.budget-lbl { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-3); }
+
+.budget-nums { display: flex; align-items: baseline; gap: 3px; }
+.budget-big { font-family: 'DM Serif Display', serif; font-size: 22px; line-height: 1; transition: color 0.2s; }
+.budget-big.under { color: var(--amber); }
+.budget-big.exact { color: var(--green); }
+.budget-big.over  { color: var(--red); }
+.budget-small { font-size: 12px; color: var(--ink-3); }
+
+.btrack { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.bfill { height: 100%; border-radius: 3px; transition: width 0.2s, background 0.2s; background: var(--amber); }
+.bfill.exact { background: var(--green); }
+.bfill.over  { background: var(--red); }
+
+.budget-hint-text { font-size: 12px; margin-top: 4px; color: var(--ink-3); min-height: 16px; }
+
+/* Action rows */
+.action-rows { display: flex; flex-direction: column; gap: 2px; margin-bottom: 32px; }
+
+.cat-divider {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 16px 0 6px;
+  border-top: 1px solid var(--border);
+  margin-top: 6px;
+}
+
+.cat-divider:first-child { border-top: none; padding-top: 0; }
+
+.action-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px 10px;
+  transition: border-color 0.15s;
+}
+
+.action-row.active { border-color: var(--blue-mid); background: var(--blue-pale); }
+
+.action-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.action-label { font-size: 13.5px; line-height: 1.5; color: var(--ink); flex: 1; }
+
+.action-pts {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--blue);
+  min-width: 36px;
+  text-align: right;
+  line-height: 1;
+}
+
+.action-pts.zero { color: var(--border-strong); }
+
+.slider-wrap { display: flex; align-items: center; gap: 8px; }
+.s-edge { font-size: 10px; color: var(--ink-3); min-width: 14px; text-align: center; }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid var(--blue);
+  box-shadow: 0 1px 3px rgba(37,99,235,0.3);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
+input[type="range"]::-moz-range-thumb {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid var(--blue);
+  cursor: pointer;
+}
+
+/* ── Completion ── */
+.completion-screen {
+  display: none;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.completion-screen.visible { display: block; }
+.completion-icon { font-size: 44px; margin-bottom: 16px; }
+.completion-screen h2 { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 10px; }
+.completion-screen p { color: var(--ink-2); font-size: 15px; margin-bottom: 6px; }
+.redirect-note { font-size: 12px; color: var(--ink-3); margin-top: 16px; letter-spacing: 0.5px; }
+
+/* ── Progress indicator ── */
+.progress-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 28px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.step.active { color: var(--blue); font-weight: 500; }
+.step.done { color: var(--green); }
+
+.step-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600;
+  flex-shrink: 0;
+}
+
+.step.done .step-num { background: var(--green); border-color: var(--green); color: white; }
+.step.active .step-num { background: var(--blue); border-color: var(--blue); color: white; }
+
+.step-line { flex: 1; height: 1px; background: var(--border); margin: 0 8px; min-width: 24px; }
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- Top Nav -->
+  <nav class="topnav">
+    <div class="nav-logo">Meridian <span>EMPLOYEE PORTAL</span></div>
+    <div class="nav-right">
+      <div class="nav-user">
+        <div class="nav-avatar">AJ</div>
+        Alex Johnson
+      </div>
+    </div>
+  </nav>
+
+  <!-- Announcement Banner (injected when manipulation fires) -->
+  <div class="announcement" id="announcementBanner"></div>
+
+  <!-- Main -->
+  <div class="main-body" id="mainBody">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Workplace</div>
+        <div class="sidebar-item active" onclick="showPage('dei')" id="nav-dei">
+          <span class="sidebar-icon">◈</span> Inclusion &amp; Belonging
+        </div>
+        <div class="sidebar-item" onclick="showPage('programs')" id="nav-programs">
+          <span class="sidebar-icon">⊞</span> Programs &amp; Training
+        </div>
+        <div class="sidebar-item" onclick="showPage('erg')" id="nav-erg">
+          <span class="sidebar-icon">◎</span> Employee Groups
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">My Portal</div>
+        <div class="sidebar-item" id="nav-respond" style="display:none; color: #2563eb; font-weight:500;" onclick="showPage('respond')">
+          <span class="sidebar-icon">📋</span> Your Response
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content Pages -->
+    <main class="content" id="contentArea">
+
+      <!-- Phase 1a: Inclusion & Belonging -->
+      <div class="page active" id="page-dei">
+        <div class="progress-steps">
+          <div class="step active" id="step1"><div class="step-num">1</div> Explore your portal</div>
+          <div class="step-line"></div>
+          <div class="step" id="step2"><div class="step-num">2</div> Company announcement</div>
+          <div class="step-line"></div>
+          <div class="step" id="step3"><div class="step-num">3</div> Share your response</div>
+        </div>
+
+        <div class="page-header">
+          <h2>Inclusion &amp; Belonging</h2>
+          <p>Meridian's commitment to a diverse, equitable, and inclusive workplace</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">About Our DEI Commitment</div>
+              <div class="card-subtitle">Updated Q1 2025</div>
+            </div>
+            <span class="badge badge-green">Active</span>
+          </div>
+          <div class="card-body">
+            <p style="font-size:13.5px; line-height:1.75; color:var(--ink-2); margin-bottom:14px;">
+              At Meridian, we believe that diverse teams build better products and stronger communities. Our Inclusion &amp; Belonging initiatives are embedded across the employee lifecycle — from recruitment and onboarding through promotion and leadership development.
+            </p>
+            <p style="font-size:13.5px; line-height:1.75; color:var(--ink-2);">
+              Our DEI efforts are coordinated by the Office of Inclusion, which partners with HR, Legal, and senior leadership to set goals, track progress, and resource programs across all business units.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Active Employee Resource Groups</div>
+          </div>
+          <div class="card-body">
+            <div class="erg-grid">
+              <div class="erg-card">
+                <div class="erg-icon">🌐</div>
+                <div class="erg-name">MOSAIC</div>
+                <div class="erg-desc">Multicultural Employee Network — celebrating cultural heritage and supporting employees of color across all levels.</div>
+                <div class="erg-meta">
+                  <div class="erg-stat"><strong>340</strong> members</div>
+                  <div class="erg-stat"><strong>12</strong> events/yr</div>
+                </div>
+              </div>
+              <div class="erg-card">
+                <div class="erg-icon">⚡</div>
+                <div class="erg-name">WOMEN FORWARD</div>
+                <div class="erg-desc">Advancing gender equity through mentorship, leadership development, and policy advocacy.</div>
+                <div class="erg-meta">
+                  <div class="erg-stat"><strong>280</strong> members</div>
+                  <div class="erg-stat"><strong>8</strong> events/yr</div>
+                </div>
+              </div>
+              <div class="erg-card">
+                <div class="erg-icon">🏳️‍🌈</div>
+                <div class="erg-name">SPECTRUM</div>
+                <div class="erg-desc">LGBTQ+ employee network fostering visibility, allyship, and an affirming workplace culture.</div>
+                <div class="erg-meta">
+                  <div class="erg-stat"><strong>190</strong> members</div>
+                  <div class="erg-stat"><strong>10</strong> events/yr</div>
+                </div>
+              </div>
+              <div class="erg-card">
+                <div class="erg-icon">♿</div>
+                <div class="erg-name">ABILITY ALLIANCE</div>
+                <div class="erg-desc">Supporting employees with disabilities and championing accessible design across our products and offices.</div>
+                <div class="erg-meta">
+                  <div class="erg-stat"><strong>120</strong> members</div>
+                  <div class="erg-stat"><strong>6</strong> events/yr</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="continue-bar">
+          <span class="continue-hint">Explore more pages, or continue when ready</span>
+          <button class="btn-primary" onclick="advanceToAnnouncement()">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Phase 1b: Programs & Training -->
+      <div class="page" id="page-programs">
+        <div class="page-header">
+          <h2>Programs &amp; Training</h2>
+          <p>Learning and development resources for an inclusive workplace</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">Current Programs</div></div>
+          <div class="card-body">
+            <div class="program-list">
+              <div class="program-item">
+                <div class="program-dot" style="background:#2563eb"></div>
+                <div>
+                  <div class="program-name">Inclusive Leadership Certification <span class="badge badge-blue" style="margin-left:8px">Required — Managers</span></div>
+                  <div class="program-desc">A 6-module course covering unconscious bias, equitable performance evaluation, and inclusive team practices. Completed by 89% of people managers in 2024.</div>
+                </div>
+              </div>
+              <div class="program-item">
+                <div class="program-dot" style="background:#16a34a"></div>
+                <div>
+                  <div class="program-name">Sponsorship Program <span class="badge badge-green" style="margin-left:8px">Active cohort</span></div>
+                  <div class="program-desc">12-month structured sponsorship pairing senior leaders with high-potential employees from underrepresented groups. Current cohort: 48 participants.</div>
+                </div>
+              </div>
+              <div class="program-item">
+                <div class="program-dot" style="background:#d97706"></div>
+                <div>
+                  <div class="program-name">Equity in Hiring Workshop <span class="badge badge-amber" style="margin-left:8px">Quarterly</span></div>
+                  <div class="program-desc">Half-day facilitated session for all hiring managers covering structured interviewing, diverse slate requirements, and bias-resistant evaluation rubrics.</div>
+                </div>
+              </div>
+              <div class="program-item">
+                <div class="program-dot" style="background:#7c3aed"></div>
+                <div>
+                  <div class="program-name">Allyship in Action <span class="badge badge-blue" style="margin-left:8px">Open enrollment</span></div>
+                  <div class="program-desc">Self-paced online course available to all employees on bystander intervention, microaggression awareness, and active allyship behaviors.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 1c: ERG detail -->
+      <div class="page" id="page-erg">
+        <div class="page-header">
+          <h2>Employee Resource Groups</h2>
+          <p>Community, connection, and advocacy across Meridian</p>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">ERG Leadership &amp; Governance</div></div>
+          <div class="card-body">
+            <p style="font-size:13.5px; line-height:1.75; color:var(--ink-2); margin-bottom: 14px;">
+              Each ERG at Meridian is co-led by elected employee officers and an executive sponsor from senior leadership. ERGs receive annual budgets, dedicated meeting time, and direct access to HR and the Office of Inclusion to raise issues and shape policy.
+            </p>
+            <p style="font-size:13.5px; line-height:1.75; color:var(--ink-2);">
+              In 2024, ERG recommendations directly influenced changes to our parental leave policy, accessibility accommodations process, and recruitment partnerships with HBCUs and Hispanic-Serving Institutions.
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Upcoming ERG Events</div></div>
+          <div class="card-body">
+            <div class="program-list">
+              <div class="program-item">
+                <div class="program-dot" style="background:#2563eb"></div>
+                <div>
+                  <div class="program-name">MOSAIC Heritage Month Kickoff</div>
+                  <div class="program-desc">May 1 · All-hands celebration with cultural showcases, food, and a keynote from VP of Engineering Priya Nair.</div>
+                </div>
+              </div>
+              <div class="program-item">
+                <div class="program-dot" style="background:#16a34a"></div>
+                <div>
+                  <div class="program-name">Women Forward: Negotiation Workshop</div>
+                  <div class="program-desc">May 7 · Interactive salary and promotion negotiation skills workshop, open to all employees.</div>
+                </div>
+              </div>
+              <div class="program-item">
+                <div class="program-dot" style="background:#ec4899"></div>
+                <div>
+                  <div class="program-name">SPECTRUM Pride Planning Meeting</div>
+                  <div class="program-desc">May 10 · Planning session for Meridian's participation in the city Pride parade and internal awareness events.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2: Announcement has appeared, allocation task -->
+      <div class="page" id="page-respond">
+        <div class="progress-steps">
+          <div class="step done" id="step1b"><div class="step-num">✓</div> Explored portal</div>
+          <div class="step-line"></div>
+          <div class="step done" id="step2b"><div class="step-num">✓</div> Read announcement</div>
+          <div class="step-line"></div>
+          <div class="step active" id="step3b"><div class="step-num">3</div> Share your response</div>
+        </div>
+
+        <div class="page-header">
+          <h2>How would you respond?</h2>
+          <p>Distribute 100 effort points across the actions below. Allocate more to actions you would invest in most.</p>
+        </div>
+
+        <div class="budget-sticky">
+          <div class="budget-track-wrap">
+            <div class="budget-top">
+              <span class="budget-lbl">Effort budget</span>
+              <div class="budget-nums">
+                <span class="budget-big under" id="budgetDisplay">100</span>
+                <span class="budget-small">/ 100 pts remaining</span>
+              </div>
+            </div>
+            <div class="btrack"><div class="bfill" id="budgetFill" style="width:0%"></div></div>
+            <div class="budget-hint-text" id="budgetHint">Allocate all 100 points to continue.</div>
+          </div>
+        </div>
+
+        <div class="action-rows" id="actionRows"></div>
+
+        <div class="continue-bar">
+          <span class="continue-hint" id="allocHint">Allocate exactly 100 points to continue</span>
+          <button class="btn-primary" id="submitBtn" disabled onclick="handleSubmit()">Submit response →</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Completion screen (replaces everything) -->
+  <div class="completion-screen" id="completionScreen">
+    <div class="completion-icon">✓</div>
+    <h2>Response recorded</h2>
+    <p>Thank you — your allocation has been saved.</p>
+    <div class="redirect-note" id="redirectNote">Returning to the survey...</div>
+  </div>
+
+</div>
+
+<script>
+// ── Config ──────────────────────────────────────────────────────
+const QUALTRICS_RETURN_URL = "https://your-qualtrics-survey-url.com"; // ← REPLACE
+const TOTAL = 100;
+
+// ── Read URL params ─────────────────────────────────────────────
+const urlParams = new URLSearchParams(window.location.search);
+const CONDITION = urlParams.get("condition") || "high"; // "high" or "low"
+const PID = urlParams.get("PROLIFIC_PID") || urlParams.get("pid") || "";
+
+// ── Actions ─────────────────────────────────────────────────────
+const ACTIONS = [
+  { id: "preserve_practices",    cat: "Preserve & Adapt",      text: "Work with colleagues or ERG leaders to preserve DEI practices within the organization." },
+  { id: "redesign_initiatives",  cat: "Preserve & Adapt",      text: "Help redesign DEI initiatives so they can continue under legal constraints or new guidelines." },
+  { id: "request_transparency",  cat: "Monitor & Scrutinize",  text: "Request transparency or evidence from leadership about what will actually change in practice." },
+  { id: "monitor_practices",     cat: "Monitor & Scrutinize",  text: "Monitor whether DEI practices are continued or eliminated following the announcement." },
+  { id: "public_criticism",      cat: "Challenge & Resist",    text: "Publicly criticize the organization's decision, internally or externally." },
+  { id: "formal_accountability", cat: "Challenge & Resist",    text: "Support formal accountability efforts (e.g., complaints, petitions, or legal channels)." },
+  { id: "exit",                  cat: "Disengage",             text: "Reduce your involvement with the organization or seek employment alternatives." },
+  { id: "advocate_rollback",     cat: "Support the Rollback",  text: "Actively advocate for institutionalizing the rollback across the organization." },
+  { id: "enforce_elimination",   cat: "Support the Rollback",  text: "Push for audits or restrictions to ensure DEI practices are fully eliminated." },
+];
+
+const values = {};
+ACTIONS.forEach(a => values[a.id] = 0);
+
+// ── Manipulation messages ────────────────────────────────────────
+const MESSAGES = {
+  high: {
+    cls: "banner-high",
+    headerIcon: "⚠",
+    headerText: "IMPORTANT COMPANY ANNOUNCEMENT",
+    from: "From: David Chen, Chief Executive Officer · Meridian Corporation",
+    title: "An Update on Our Organizational Structure and Programs",
+    body: `
+      <p>Effective immediately, Meridian is discontinuing its formal Diversity, Equity &amp; Inclusion programs. The Office of Inclusion will be dissolved, and all associated roles will be eliminated as part of a broader restructuring.</p>
+      <p>The Sponsorship Program, Inclusive Leadership Certification, and Equity in Hiring workshops will no longer be offered. Employee Resource Groups will be permitted to continue as voluntary social groups but will no longer receive company funding, executive sponsorship, or formal HR support.</p>
+      <p>All DEI-related language will be removed from our external communications, job postings, and employee portal. Going forward, hiring and promotion decisions will be governed by a unified merit-based framework without reference to diversity targets or equity considerations.</p>
+      <p>We recognize this represents a significant change. Managers will receive guidance from HR on communicating these changes to their teams.</p>
+    `
+  },
+  low: {
+    cls: "banner-low",
+    headerIcon: "📢",
+    headerText: "MESSAGE FROM LEADERSHIP",
+    from: "From: David Chen, Chief Executive Officer · Meridian Corporation",
+    title: "Evolving How We Communicate Our Workplace Commitments",
+    body: `
+      <p>We are making some changes to how we publicly describe our workplace culture and programs. Going forward, we will be moving away from specific DEI-related terminology in our external communications, job postings, and public-facing materials.</p>
+      <p>I want to be clear about what this means — and what it does not mean. This is a change in language and external framing, not a change in our programs or practices. Our Employee Resource Groups, sponsorship and mentorship programs, inclusive hiring practices, and leadership development initiatives will all continue exactly as they are.</p>
+      <p>This adjustment reflects the evolving legal and regulatory landscape, and our Legal team's advice to reduce our public profile on these matters. Internally, our commitment to building a workplace where every employee can thrive remains unchanged, and our budget and staffing for these programs is unaffected.</p>
+      <p>If you have questions about specific programs, please reach out to your HR Business Partner or the Office of Inclusion directly.</p>
+    `
+  }
+};
+
+// ── Page navigation ─────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".sidebar-item").forEach(s => s.classList.remove("active"));
+  document.getElementById("page-" + id).classList.add("active");
+  const navEl = document.getElementById("nav-" + id);
+  if (navEl) navEl.classList.add("active");
+}
+
+// ── Fire announcement + reveal response tab ──────────────────────
+function advanceToAnnouncement() {
+  const msg = MESSAGES[CONDITION] || MESSAGES.high;
+  const banner = document.getElementById("announcementBanner");
+
+  banner.innerHTML = `
+    <div class="${msg.cls}">
+      <div class="banner-header"><span>${msg.headerIcon}</span> ${msg.headerText}</div>
+      <div class="banner-body">
+        <div class="banner-from">${msg.from}</div>
+        <div class="banner-title">${msg.title}</div>
+        <div class="banner-text">${msg.body}</div>
+      </div>
+    </div>
+  `;
+  banner.classList.add("visible");
+
+  // Scroll to banner
+  banner.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  // Reveal "Your Response" nav item
+  document.getElementById("nav-respond").style.display = "flex";
+
+  // Show respond page after short delay
+  setTimeout(() => {
+    showPage("respond");
+    buildAllocationUI();
+    document.getElementById("contentArea").scrollTop = 0;
+  }, 3200);
+}
+
+// ── Build allocation UI ──────────────────────────────────────────
+let uiBuilt = false;
+function buildAllocationUI() {
+  if (uiBuilt) return;
+  uiBuilt = true;
+
+  const container = document.getElementById("actionRows");
+  let currentCat = null;
+
+  ACTIONS.forEach(action => {
+    if (action.cat !== currentCat) {
+      currentCat = action.cat;
+      const div = document.createElement("div");
+      div.className = "cat-divider";
+      div.textContent = action.cat;
+      container.appendChild(div);
+    }
+
+    const row = document.createElement("div");
+    row.className = "action-row";
+    row.id = "row_" + action.id;
+    row.innerHTML = `
+      <div class="action-row-top">
+        <div class="action-label">${action.text}</div>
+        <div class="action-pts zero" id="pts_${action.id}">0</div>
+      </div>
+      <div class="slider-wrap">
+        <span class="s-edge">0</span>
+        <input type="range" min="0" max="100" value="0" step="1" id="sl_${action.id}">
+        <span class="s-edge">100</span>
+      </div>
+    `;
+    container.appendChild(row);
+
+    row.querySelector(`#sl_${action.id}`)
+      .addEventListener("input", e => onSlider(action.id, parseInt(e.target.value)));
+  });
+}
+
+function onSlider(id, newVal) {
+  const otherSum = Object.entries(values).filter(([k]) => k !== id).reduce((s, [,v]) => s + v, 0);
+  const clamped = Math.min(newVal, Math.max(0, TOTAL - otherSum));
+  values[id] = clamped;
+  document.getElementById(`sl_${id}`).value = clamped;
+  const ptsEl = document.getElementById(`pts_${id}`);
+  ptsEl.textContent = clamped;
+  ptsEl.className = "action-pts" + (clamped === 0 ? " zero" : "");
+  document.getElementById("row_" + id).className = "action-row" + (clamped > 0 ? " active" : "");
+  updateBudget();
+}
+
+function getTotal() { return Object.values(values).reduce((s, v) => s + v, 0); }
+
+function updateBudget() {
+  const total = getTotal();
+  const rem = TOTAL - total;
+  const pct = Math.min((total / TOTAL) * 100, 100);
+
+  const disp = document.getElementById("budgetDisplay");
+  const fill = document.getElementById("budgetFill");
+  const hint = document.getElementById("budgetHint");
+  const btn  = document.getElementById("submitBtn");
+  const ahint = document.getElementById("allocHint");
+
+  disp.textContent = rem;
+  fill.style.width = pct + "%";
+
+  if (total === TOTAL) {
+    disp.className = "budget-big exact";
+    fill.className = "bfill exact";
+    hint.textContent = "All 100 points allocated.";
+    btn.disabled = false;
+    ahint.textContent = "Ready to submit";
+    ahint.style.color = "var(--green)";
+  } else if (total > TOTAL) {
+    disp.className = "budget-big over";
+    fill.className = "bfill over";
+    hint.textContent = `${total - TOTAL} points over — reduce some sliders.`;
+    btn.disabled = true;
+    ahint.textContent = "Allocate exactly 100 points to continue";
+    ahint.style.color = "";
+  } else {
+    disp.className = "budget-big under";
+    fill.className = "bfill";
+    hint.textContent = `${rem} point${rem !== 1 ? "s" : ""} remaining.`;
+    btn.disabled = true;
+    ahint.textContent = "Allocate exactly 100 points to continue";
+    ahint.style.color = "";
+  }
+}
+
+// ── Submit ───────────────────────────────────────────────────────
+function handleSubmit() {
+  if (getTotal() !== TOTAL) return;
+
+  const params = new URLSearchParams();
+  params.set("condition", CONDITION);
+  ACTIONS.forEach(a => params.set(a.id, values[a.id]));
+  if (PID) params.set("PROLIFIC_PID", PID);
+
+  // Hide app, show completion
+  document.getElementById("app").style.display = "none";
+  document.getElementById("completionScreen").classList.add("visible");
+
+  const returnUrl = `${QUALTRICS_RETURN_URL}?${params.toString()}`;
+  setTimeout(() => {
+    document.getElementById("redirectNote").textContent = "Redirecting now...";
+    window.location.href = returnUrl;
+  }, 1800);
+}
+</script>
+
+<!-- DEV PREVIEW TOGGLE — remove before hosting -->
+<div id="devToggle" style="position:fixed;bottom:16px;right:16px;z-index:9999;background:#1c2333;color:white;padding:10px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+  <div style="font-size:10px;letter-spacing:1.5px;opacity:0.5;margin-bottom:6px;">PREVIEW CONDITION</div>
+  <div style="display:flex;gap:8px;">
+    <button onclick="setCondition('high')" id="btn-high" style="padding:5px 12px;border-radius:4px;border:none;cursor:pointer;font-family:inherit;font-size:12px;background:#dc2626;color:white;font-weight:600;">High</button>
+    <button onclick="setCondition('low')" id="btn-low" style="padding:5px 12px;border-radius:4px;border:none;cursor:pointer;font-family:inherit;font-size:12px;background:#333;color:#aaa;">Low</button>
+  </div>
+</div>
+<script>
+function setCondition(c) {
+  // Reset page state
+  location.search = '?condition=' + c;
+}
+// Highlight active button
+document.addEventListener('DOMContentLoaded', () => {
+  const active = CONDITION;
+  document.getElementById('btn-high').style.background = active === 'high' ? '#dc2626' : '#333';
+  document.getElementById('btn-high').style.color = active === 'high' ? 'white' : '#aaa';
+  document.getElementById('btn-low').style.background = active === 'low' ? '#2563eb' : '#333';
+  document.getElementById('btn-low').style.color = active === 'low' ? 'white' : '#aaa';
+});
+</script>
+
+</body>
+</html>
