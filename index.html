@@ -58,9 +58,7 @@ body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font
 @keyframes nudgeBob{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
 .scroll-nudge.hidden{display:none;}
 .memo-footer{flex-shrink:0;padding:13px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);}
-.memo-countdown{font-size:12px;color:var(--ink-3);}
-.memo-countdown strong{color:var(--amber);font-family:'DM Serif Display',serif;font-size:16px;}
-.memo-countdown.ready{color:var(--green);}
+.memo-countdown{display:none;}
 .btn-memo{background:var(--blue);color:white;border:none;padding:9px 22px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:500;cursor:pointer;transition:background 0.15s,transform 0.1s;}
 .btn-memo:hover:not(:disabled){background:#1d4ed8;transform:translateY(-1px);}
 .btn-memo:disabled{background:var(--border-strong);color:var(--ink-3);cursor:not-allowed;transform:none;}
@@ -210,7 +208,7 @@ body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font
   <span>⚠</span> <strong>Portal updated</strong> — This portal reflects the organizational changes announced by CEO David Chen.
 </div>
 
-<div class="memo-overlay" id="memoOverlay"><div class="memo-modal"><div class="memo-top-bar" id="memoTopBar"></div><div class="memo-scroll-body" id="memoScrollBody"></div><div class="scroll-nudge" id="scrollNudge">↓ scroll to read</div><div class="memo-footer"><div class="memo-countdown" id="memoCountdown"><strong id="countdownNum">20</strong> sec</div><button class="btn-memo" id="memoContinueBtn" disabled onclick="dismissMemo()">I have read this announcement →</button></div></div></div>
+<div class="memo-overlay" id="memoOverlay"><div class="memo-modal"><div class="memo-top-bar" id="memoTopBar"></div><div class="memo-scroll-body" id="memoScrollBody"></div><div class="scroll-nudge" id="scrollNudge">↓ scroll to read</div><div class="memo-footer"><div class="memo-countdown" id="memoCountdown"><strong id="countdownNum">20</strong></div><button class="btn-memo" id="memoContinueBtn" disabled onclick="dismissMemo()">I have read this announcement →</button></div></div></div>
 
 <div class="main-body">
   <aside class="sidebar">
@@ -386,18 +384,26 @@ const MESSAGES = {
     cls:"banner-high", icon:"⚠", label:"IMPORTANT COMPANY ANNOUNCEMENT",
     from:"From: David Chen, Chief Executive Officer · Meridian Corporation",
     title:"An Update on Our Organizational Structure and Programs",
-    body:`<p>Effective immediately, Meridian is discontinuing its formal Diversity, Equity &amp; Inclusion programs. The Office of Inclusion will be dissolved and all associated roles eliminated as part of a broader restructuring.</p>
-<p>The Sponsorship Program, Inclusive Leadership Certification, and Equity in Hiring workshops will no longer be offered. Employee Resource Groups may continue as voluntary social groups but will no longer receive company funding, executive sponsorship, or formal HR support.</p>
-<p>DEI-related language will be removed from our external communications, job postings, and employee portal. Going forward, hiring and promotion decisions will follow a unified merit-based framework without reference to diversity targets or equity considerations.</p>
+    body:`<p>Current actions include:</p>
+<ul style="margin:0 0 12px 20px;line-height:1.8;">
+  <li>Concluding our three-year "Diversity, Equity, and Inclusion" action plan and discontinuing its associated budget allocations, reporting structures, and performance targets.</li>
+  <li>Ending our Racial Equity Action and Change (REACH) initiative, including the retirement of its operational milestones, benchmarking systems, and dedicated staffing.</li>
+  <li>Eliminating demographic-based employee resource groups and reallocating associated funding toward general professional development programs open to all employees.</li>
+  <li>Ending external representation tracking and diversity benchmarking participation, and discontinuing demographic-specific advancement targets.</li>
+</ul>
 <p>Managers will receive guidance from HR on communicating these changes to their teams.</p>`
   },
   low:{
     cls:"banner-low", icon:"📢", label:"MESSAGE FROM LEADERSHIP",
     from:"From: David Chen, Chief Executive Officer · Meridian Corporation",
     title:"Evolving How We Communicate Our Workplace Commitments",
-    body:`<p>We are making changes to how we publicly describe our workplace culture and programs. Going forward, we will move away from specific DEI-related terminology in our external communications, job postings, and public-facing materials.</p>
-<p>I want to be clear about what this means — and what it does not mean. This is a change in language and external framing, not in our programs or practices. Our ERGs, mentorship and sponsorship programs, inclusive hiring practices, and leadership development initiatives will all continue exactly as they are.</p>
-<p>This reflects advice from our Legal team to reduce our public profile on these matters given the evolving regulatory landscape. Internally, our commitment is unchanged, and budget and staffing for these programs are unaffected.</p>
+    body:`<p>Current actions include:</p>
+<ul style="margin:0 0 12px 20px;line-height:1.8;">
+  <li>Evolving our three-year "Diversity, Equity, and Inclusion" action plan to a "Belonging at Meridian" action plan, ensuring the continuity of the scope, budget, accountability structures, and performance goals.</li>
+  <li>Renaming our "Racial Equity Action and Change" initiative to "Radical Engagement for Action and Change" (REACH), while maintaining our established operational milestones and performance benchmarks.</li>
+  <li>Integrating demographic-based employee resource groups into a central inclusive development and mentorship model, with continued budget support and sponsorship from leadership.</li>
+  <li>Optimizing stakeholder communication strategy to emphasize talent sustainability and belonging. While external language will shift, internal representation tracking, advancement metrics, demographic reporting, and progress targets will continue.</li>
+</ul>
 <p>Questions about specific programs? Contact your HR Business Partner or the Office of Inclusion directly.</p>`
   }
 };
