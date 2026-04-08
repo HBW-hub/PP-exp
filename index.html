@@ -7,9 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:#0d0f12; --surface:#151820; --surface-2:#1c1f28;
-  --border:#252933; --border-strong:#343a47;
-  --ink:#e8eaf0; --ink-2:#9ba3b5; --ink-3:#555f72;
+  --bg:#111318; --surface:#1a1d26; --surface-2:#21242f;
+  --border:#2e3340; --border-strong:#404760;
+  --ink:#f0f2f7; --ink-2:#b0bad0; --ink-3:#6a7590;
   --blue:#3b82f6; --blue-pale:rgba(59,130,246,0.1); --blue-mid:rgba(59,130,246,0.3);
   --green:#22c55e; --green-pale:rgba(34,197,94,0.1); --green-mid:rgba(34,197,94,0.3);
   --amber:#f59e0b; --amber-pale:rgba(245,158,11,0.1);
@@ -23,7 +23,7 @@
   --serif:'IBM Plex Serif',serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;min-height:100vh;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;min-height:100vh;}
 .app{display:flex;flex-direction:column;min-height:100vh;}
 
 /* nav */
@@ -39,12 +39,12 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14p
 .memo-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(15,20,30,0.82);backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:24px 16px;animation:fadeOverlay 0.35s ease;}
 .memo-overlay.visible{display:flex;}
 @keyframes fadeOverlay{from{opacity:0;}to{opacity:1;}}
-.memo-modal{background:#0f1117;border:1px solid var(--border);border-radius:4px;box-shadow:0 24px 60px rgba(0,0,0,0.7);width:100%;max-width:680px;max-height:88vh;display:flex;flex-direction:column;animation:slideModal 0.3s ease;overflow:hidden;}
+.memo-modal{background:#13161f;border:1px solid var(--border);border-radius:4px;box-shadow:0 24px 60px rgba(0,0,0,0.7);width:100%;max-width:680px;max-height:88vh;display:flex;flex-direction:column;animation:slideModal 0.3s ease;overflow:hidden;}
 @keyframes slideModal{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 .memo-top-bar{flex-shrink:0;padding:11px 20px;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
 .memo-top-bar.high{background:#dc2626;color:white;font-family:var(--mono);}
 .memo-top-bar.low{background:#1d4ed8;color:white;font-family:var(--mono);}
-.memo-scroll-body{flex:1;overflow-y:auto;padding:28px 32px 20px;background:#0f1117;}
+.memo-scroll-body{flex:1;overflow-y:auto;padding:28px 32px 20px;background:#13161f;}
 .memo-letterhead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
 .memo-org{font-family:var(--mono);font-size:16px;font-weight:500;color:var(--amber);letter-spacing:1px;}
 .memo-org-sub{font-size:10px;color:var(--ink-3);margin-top:3px;font-family:var(--mono);letter-spacing:0.5px;}
@@ -54,13 +54,13 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14p
 .memo-field-label{font-weight:500;color:var(--ink-3);min-width:52px;text-transform:uppercase;letter-spacing:0.5px;}
 .memo-field-value{color:var(--ink-2);}
 .memo-subject{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--ink);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);letter-spacing:0.3px;}
-.memo-body{font-size:13.5px;line-height:1.85;color:var(--ink-2);}
+.memo-body{font-size:14.5px;line-height:1.85;color:var(--ink-2);}
 .memo-body p{margin-bottom:12px;}
 .memo-body p:last-child{margin-bottom:0;}
 .scroll-nudge{text-align:center;font-size:11px;color:var(--ink-3);padding:8px 0 2px;animation:nudgeBob 2s ease-in-out infinite;flex-shrink:0;font-family:var(--mono);}
 @keyframes nudgeBob{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
 .scroll-nudge.hidden{display:none;}
-.memo-footer{flex-shrink:0;padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#0a0c10;}
+.memo-footer{flex-shrink:0;padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#1a1d26;}
 .memo-countdown{display:none;}
 .btn-memo{background:var(--amber);color:#000;border:none;padding:9px 22px;border-radius:var(--radius);font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;transition:background 0.15s;}
 .btn-memo:hover:not(:disabled){background:#fbbf24;}
@@ -73,7 +73,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14p
 .sidebar{width:200px;background:var(--surface);border-right:1px solid var(--border);padding:20px 0;flex-shrink:0;}
 .sidebar-section{margin-bottom:20px;}
 .sidebar-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-3);padding:0 16px;margin-bottom:6px;font-family:var(--mono);}
-.sidebar-item{display:flex;align-items:center;gap:9px;padding:7px 16px;font-size:12.5px;color:var(--ink-2);cursor:pointer;border-left:2px solid transparent;transition:background 0.15s,color 0.15s;}
+.sidebar-item{display:flex;align-items:center;gap:9px;padding:8px 16px;font-size:13px;color:var(--ink-2);cursor:pointer;border-left:2px solid transparent;transition:background 0.15s,color 0.15s;}
 .sidebar-item:hover{background:var(--surface-2);color:var(--ink);}
 .sidebar-item.active{background:rgba(245,158,11,0.08);color:var(--amber);border-left-color:var(--amber);font-weight:500;}
 .sidebar-icon{font-size:13px;opacity:0.6;}
@@ -84,15 +84,15 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14p
 
 /* page header */
 .page-header{margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
-.page-header h2{font-family:var(--mono);font-size:16px;font-weight:500;color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.page-header h2{font-family:var(--mono);font-size:17px;font-weight:500;color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
 .page-header p{color:var(--ink-3);font-size:12px;font-family:var(--mono);}
 
 /* cards */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:12px;}
 .card-header{padding:12px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.card-title{font-size:11px;font-weight:500;color:var(--ink-2);letter-spacing:1.5px;text-transform:uppercase;font-family:var(--mono);}
+.card-title{font-size:11px;font-weight:600;color:var(--ink);letter-spacing:1.5px;text-transform:uppercase;font-family:var(--mono);}
 .card-subtitle{font-size:10.5px;color:var(--ink-3);margin-top:2px;font-family:var(--mono);}
-.card-body{padding:16px;}
+.card-body{padding:18px;}
 
 /* badges */
 .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;}
@@ -117,7 +117,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14p
 .prog-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);}
 .prog-row.discontinued{opacity:0.4;}
 .prog-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.prog-name{font-size:13px;font-weight:400;color:var(--ink);flex:1;}
+.prog-name{font-size:14px;font-weight:400;color:var(--ink);flex:1;}
 
 /* notices */
 .notice-box{border-radius:var(--radius);padding:10px 14px;margin-bottom:12px;font-size:12px;line-height:1.6;font-family:var(--mono);border-left-width:3px;border-left-style:solid;}
@@ -175,7 +175,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14p
 .activity-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px 14px;transition:border-color 0.15s,background 0.15s;}
 .activity-card.on{border-color:rgba(245,158,11,0.5);background:rgba(245,158,11,0.04);}
 .activity-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px;}
-.activity-text{font-size:15px;line-height:1.6;color:var(--ink);flex:1;font-weight:400;}
+.activity-text{font-size:16px;line-height:1.65;color:var(--ink);flex:1;font-weight:400;}
 .pts-badge{text-align:right;flex-shrink:0;}
 .pts-num{font-family:var(--mono);font-size:28px;line-height:1;color:var(--border-strong);transition:color 0.15s;font-weight:500;}
 .pts-num.on{color:var(--amber);}
@@ -189,6 +189,12 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14p
 .stepper-track{flex:1;height:36px;position:relative;background:var(--surface-2);overflow:hidden;}
 .stepper-fill{position:absolute;left:0;top:0;bottom:0;background:rgba(245,158,11,0.2);transition:width 0.15s;}
 .stepper-lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--ink-2);user-select:none;font-family:var(--mono);}
+
+/* portal CTA card */
+.portal-cta-card{background:var(--surface);border:1px solid var(--border-strong);border-left:3px solid var(--amber);border-radius:var(--radius);padding:18px 20px;margin-bottom:18px;box-shadow:var(--shadow-md);}
+.portal-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.portal-cta-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:5px;}
+.portal-cta-body{font-size:14px;line-height:1.5;color:var(--ink);}
 
 /* completion */
 .completion-screen{display:none;text-align:center;padding:80px 20px;}
@@ -543,9 +549,15 @@ function dismissMemo(){
   const deiPage = document.getElementById("page-dei");
   if(!deiPage.querySelector(".portal-prompt")){
     const prompt = document.createElement("div");
-    prompt.className = "notice-box info portal-prompt";
-    prompt.style.marginBottom = "14px";
-    prompt.innerHTML = `<strong>Next step:</strong> The portal has been updated. Review the current state of Synertech's programs, then click <strong>Your Reaction</strong> in the sidebar when ready.`;
+    prompt.className = "portal-cta-card portal-prompt";
+    prompt.innerHTML = `
+      <div class="portal-cta-inner">
+        <div class="portal-cta-text">
+          <div class="portal-cta-label">Next step</div>
+          <div class="portal-cta-body">Review the updated portal, then share your reaction to the announcement.</div>
+        </div>
+        <button class="btn-primary" onclick="showPage('openended');document.getElementById('nav-openended').classList.add('active');">Your Response →</button>
+      </div>`;
     const hdr = deiPage.querySelector(".page-header");
     if(hdr) deiPage.insertBefore(prompt, hdr);
   }
