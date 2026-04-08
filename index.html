@@ -3,93 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meridian Internal Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<title>Synertech Employee Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:#f4f6f8; --surface:#fff; --surface-2:#f9fafb;
-  --border:#e2e6ea; --border-strong:#c8ced6;
-  --ink:#1c2333; --ink-2:#4a5568; --ink-3:#8a95a3;
-  --blue:#2563eb; --blue-pale:#eff4ff; --blue-mid:#bfcffb;
-  --green:#16a34a; --green-pale:#f0fdf4; --green-mid:#86efac;
-  --amber:#d97706; --amber-pale:#fffbeb;
-  --red:#dc2626; --red-pale:#fef2f2;
-  --grey:#6b7280; --grey-pale:#f3f4f6;
-  --accent:#1e3a5f; --radius:8px;
-  --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md:0 4px 12px rgba(0,0,0,0.1);
+  --bg:#0d0f12; --surface:#151820; --surface-2:#1c1f28;
+  --border:#252933; --border-strong:#343a47;
+  --ink:#e8eaf0; --ink-2:#9ba3b5; --ink-3:#555f72;
+  --blue:#3b82f6; --blue-pale:rgba(59,130,246,0.1); --blue-mid:rgba(59,130,246,0.3);
+  --green:#22c55e; --green-pale:rgba(34,197,94,0.1); --green-mid:rgba(34,197,94,0.3);
+  --amber:#f59e0b; --amber-pale:rgba(245,158,11,0.1);
+  --red:#ef4444; --red-pale:rgba(239,68,68,0.1);
+  --grey:#6b7280; --grey-pale:rgba(107,114,128,0.15);
+  --accent:#0d0f12; --radius:4px;
+  --shadow:0 1px 3px rgba(0,0,0,0.4),0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.5);
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
+  --serif:'IBM Plex Serif',serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px;min-height:100vh;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;min-height:100vh;}
 .app{display:flex;flex-direction:column;min-height:100vh;}
 
 /* nav */
-.topnav{background:var(--accent);color:white;display:flex;align-items:center;padding:0 32px;height:52px;flex-shrink:0;position:sticky;top:0;z-index:200;}
-.nav-logo{font-family:'DM Serif Display',serif;font-size:18px;color:white;}
-.nav-logo span{opacity:0.55;font-size:12px;margin-left:10px;font-family:'DM Sans',sans-serif;font-weight:300;letter-spacing:1px;}
+.topnav{background:#000;color:white;display:flex;align-items:center;padding:0 28px;height:48px;flex-shrink:0;position:sticky;top:0;z-index:200;border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--amber);letter-spacing:2px;text-transform:uppercase;}
+.nav-logo span{color:var(--ink-3);font-size:11px;margin-left:12px;letter-spacing:1.5px;font-family:var(--mono);}
 
 /* portal update bar — high condition only */
-.portal-update-bar{display:none;background:#1c2333;color:rgba(255,255,255,0.75);font-size:12px;padding:6px 32px;align-items:center;gap:8px;border-bottom:2px solid #dc2626;}
-.portal-update-bar strong{color:white;}
+.portal-update-bar{display:none;background:#1a0000;color:rgba(255,100,100,0.85);font-size:11px;padding:5px 28px;align-items:center;gap:8px;border-bottom:1px solid rgba(239,68,68,0.4);font-family:var(--mono);letter-spacing:0.3px;}
+.portal-update-bar strong{color:var(--red);}
 
 /* announcement modal overlay */
 .memo-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(15,20,30,0.82);backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:24px 16px;animation:fadeOverlay 0.35s ease;}
 .memo-overlay.visible{display:flex;}
 @keyframes fadeOverlay{from{opacity:0;}to{opacity:1;}}
-.memo-modal{background:var(--surface);border-radius:10px;box-shadow:0 24px 60px rgba(0,0,0,0.45);width:100%;max-width:680px;max-height:88vh;display:flex;flex-direction:column;animation:slideModal 0.3s ease;overflow:hidden;}
+.memo-modal{background:#0f1117;border:1px solid var(--border);border-radius:4px;box-shadow:0 24px 60px rgba(0,0,0,0.7);width:100%;max-width:680px;max-height:88vh;display:flex;flex-direction:column;animation:slideModal 0.3s ease;overflow:hidden;}
 @keyframes slideModal{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 .memo-top-bar{flex-shrink:0;padding:11px 20px;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
-.memo-top-bar.high{background:#dc2626;color:white;}
-.memo-top-bar.low{background:var(--blue);color:white;}
-.memo-scroll-body{flex:1;overflow-y:auto;padding:30px 34px 20px;}
-.memo-letterhead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;padding-bottom:16px;border-bottom:2px solid var(--ink);}
-.memo-org{font-family:'DM Serif Display',serif;font-size:19px;color:var(--ink);}
-.memo-org-sub{font-size:11px;color:var(--ink-3);margin-top:2px;}
-.memo-date{font-size:12px;color:var(--ink-3);text-align:right;}
-.memo-fields{margin-bottom:18px;}
-.memo-field{display:flex;gap:8px;font-size:12.5px;margin-bottom:4px;}
-.memo-field-label{font-weight:600;color:var(--ink);min-width:52px;}
+.memo-top-bar.high{background:#dc2626;color:white;font-family:var(--mono);}
+.memo-top-bar.low{background:#1d4ed8;color:white;font-family:var(--mono);}
+.memo-scroll-body{flex:1;overflow-y:auto;padding:28px 32px 20px;background:#0f1117;}
+.memo-letterhead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.memo-org{font-family:var(--mono);font-size:16px;font-weight:500;color:var(--amber);letter-spacing:1px;}
+.memo-org-sub{font-size:10px;color:var(--ink-3);margin-top:3px;font-family:var(--mono);letter-spacing:0.5px;}
+.memo-date{font-size:11px;color:var(--ink-3);text-align:right;font-family:var(--mono);}
+.memo-fields{margin-bottom:16px;}
+.memo-field{display:flex;gap:8px;font-size:11.5px;margin-bottom:4px;font-family:var(--mono);}
+.memo-field-label{font-weight:500;color:var(--ink-3);min-width:52px;text-transform:uppercase;letter-spacing:0.5px;}
 .memo-field-value{color:var(--ink-2);}
-.memo-subject{font-family:'DM Serif Display',serif;font-size:17px;color:var(--ink);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);}
-.memo-body{font-size:13.5px;line-height:1.8;color:var(--ink-2);}
+.memo-subject{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--ink);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);letter-spacing:0.3px;}
+.memo-body{font-size:13.5px;line-height:1.85;color:var(--ink-2);}
 .memo-body p{margin-bottom:12px;}
 .memo-body p:last-child{margin-bottom:0;}
-.scroll-nudge{text-align:center;font-size:11.5px;color:var(--ink-3);padding:8px 0 2px;animation:nudgeBob 2s ease-in-out infinite;flex-shrink:0;}
+.scroll-nudge{text-align:center;font-size:11px;color:var(--ink-3);padding:8px 0 2px;animation:nudgeBob 2s ease-in-out infinite;flex-shrink:0;font-family:var(--mono);}
 @keyframes nudgeBob{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
 .scroll-nudge.hidden{display:none;}
-.memo-footer{flex-shrink:0;padding:13px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);}
+.memo-footer{flex-shrink:0;padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#0a0c10;}
 .memo-countdown{display:none;}
-.btn-memo{background:var(--blue);color:white;border:none;padding:9px 22px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:500;cursor:pointer;transition:background 0.15s,transform 0.1s;}
-.btn-memo:hover:not(:disabled){background:#1d4ed8;transform:translateY(-1px);}
-.btn-memo:disabled{background:var(--border-strong);color:var(--ink-3);cursor:not-allowed;transform:none;}
+.btn-memo{background:var(--amber);color:#000;border:none;padding:9px 22px;border-radius:var(--radius);font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;transition:background 0.15s;}
+.btn-memo:hover:not(:disabled){background:#fbbf24;}
+.btn-memo:disabled{background:var(--border);color:var(--ink-3);cursor:not-allowed;}
 
 /* layout */
 .main-body{display:flex;flex:1;overflow:hidden;}
 
 /* sidebar */
-.sidebar{width:210px;background:var(--surface);border-right:1px solid var(--border);padding:20px 0;flex-shrink:0;}
+.sidebar{width:200px;background:var(--surface);border-right:1px solid var(--border);padding:20px 0;flex-shrink:0;}
 .sidebar-section{margin-bottom:20px;}
-.sidebar-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-3);padding:0 18px;margin-bottom:5px;}
-.sidebar-item{display:flex;align-items:center;gap:9px;padding:8px 18px;font-size:13.5px;color:var(--ink-2);cursor:pointer;border-left:3px solid transparent;transition:background 0.15s;}
-.sidebar-item:hover{background:var(--bg);}
-.sidebar-item.active{background:var(--blue-pale);color:var(--blue);border-left-color:var(--blue);font-weight:500;}
-.sidebar-icon{font-size:14px;opacity:0.65;}
+.sidebar-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-3);padding:0 16px;margin-bottom:6px;font-family:var(--mono);}
+.sidebar-item{display:flex;align-items:center;gap:9px;padding:7px 16px;font-size:12.5px;color:var(--ink-2);cursor:pointer;border-left:2px solid transparent;transition:background 0.15s,color 0.15s;}
+.sidebar-item:hover{background:var(--surface-2);color:var(--ink);}
+.sidebar-item.active{background:rgba(245,158,11,0.08);color:var(--amber);border-left-color:var(--amber);font-weight:500;}
+.sidebar-icon{font-size:13px;opacity:0.6;}
 
 /* content */
-.content{flex:1;overflow-y:auto;padding:28px 32px 60px;}
+.content{flex:1;overflow-y:auto;padding:24px 28px 60px;}
 .page{display:none;}.page.active{display:block;}
 
 /* page header */
-.page-header{margin-bottom:20px;}
-.page-header h2{font-family:'DM Serif Display',serif;font-size:21px;color:var(--ink);margin-bottom:3px;}
-.page-header p{color:var(--ink-3);font-size:13px;}
+.page-header{margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.page-header h2{font-family:var(--mono);font-size:16px;font-weight:500;color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.page-header p{color:var(--ink-3);font-size:12px;font-family:var(--mono);}
 
 /* cards */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:14px;}
-.card-header{padding:14px 18px 11px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.card-title{font-size:13.5px;font-weight:600;color:var(--ink);}
-.card-subtitle{font-size:11.5px;color:var(--ink-3);margin-top:2px;}
-.card-body{padding:18px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:12px;}
+.card-header{padding:12px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:11px;font-weight:500;color:var(--ink-2);letter-spacing:1.5px;text-transform:uppercase;font-family:var(--mono);}
+.card-subtitle{font-size:10.5px;color:var(--ink-3);margin-top:2px;font-family:var(--mono);}
+.card-body{padding:16px;}
 
 /* badges */
 .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;}
@@ -100,27 +103,27 @@ body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font
 .badge-grey{background:var(--grey-pale);color:var(--grey);}
 
 /* ERG grid */
-.erg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.erg-card{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:14px;}
-.erg-card.dimmed{opacity:0.6;}
-.erg-icon{font-size:20px;margin-bottom:6px;}
-.erg-name{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px;}
-.erg-meta{font-size:11.5px;color:var(--ink-3);margin-bottom:8px;}
-.erg-notice{font-size:11.5px;background:var(--grey-pale);border:1px solid var(--border);border-radius:4px;padding:7px 9px;line-height:1.5;color:var(--ink-2);}
-.erg-notice.green{background:var(--green-pale);border-color:var(--green-mid);color:#166534;}
+.erg-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.erg-card{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;}
+.erg-card.dimmed{opacity:0.4;}
+.erg-icon{font-size:18px;margin-bottom:5px;}
+.erg-name{font-size:11px;font-weight:500;color:var(--amber);margin-bottom:3px;letter-spacing:1px;text-transform:uppercase;font-family:var(--mono);}
+.erg-meta{font-size:11px;color:var(--ink-3);margin-bottom:7px;font-family:var(--mono);}
+.erg-notice{font-size:11px;background:rgba(107,114,128,0.1);border:1px solid var(--border);border-radius:2px;padding:6px 8px;line-height:1.5;color:var(--ink-3);font-family:var(--mono);}
+.erg-notice.green{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.3);color:#86efac;}
 
 /* program rows */
-.prog-list{display:flex;flex-direction:column;gap:8px;}
-.prog-row{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;}
-.prog-row.discontinued{opacity:0.55;}
-.prog-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
-.prog-name{font-size:13px;font-weight:500;color:var(--ink);flex:1;}
+.prog-list{display:flex;flex-direction:column;gap:6px;}
+.prog-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);}
+.prog-row.discontinued{opacity:0.4;}
+.prog-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.prog-name{font-size:13px;font-weight:400;color:var(--ink);flex:1;}
 
 /* notices */
-.notice-box{border-radius:6px;padding:12px 15px;margin-bottom:14px;font-size:12.5px;line-height:1.6;}
-.notice-box.warning{background:var(--red-pale);border:1px solid #fca5a5;color:#7f1d1d;}
-.notice-box.info{background:var(--blue-pale);border:1px solid var(--blue-mid);color:#1e3a8a;}
-.notice-box.success{background:var(--green-pale);border:1px solid var(--green-mid);color:#14532d;}
+.notice-box{border-radius:var(--radius);padding:10px 14px;margin-bottom:12px;font-size:12px;line-height:1.6;font-family:var(--mono);border-left-width:3px;border-left-style:solid;}
+.notice-box.warning{background:var(--red-pale);border:1px solid rgba(239,68,68,0.3);border-left:3px solid var(--red);color:#fca5a5;}
+.notice-box.info{background:var(--blue-pale);border:1px solid rgba(59,130,246,0.3);border-left:3px solid var(--blue);color:#93c5fd;}
+.notice-box.success{background:var(--green-pale);border:1px solid rgba(34,197,94,0.3);border-left:3px solid var(--green);color:#86efac;}
 
 /* progress steps */
 .progress-steps{display:flex;align-items:center;margin-bottom:24px;}
@@ -133,18 +136,18 @@ body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font
 .step-line{flex:1;height:1px;background:var(--border);margin:0 7px;min-width:16px;}
 
 /* continue bar */
-.continue-bar{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:24px;padding-top:18px;border-top:1px solid var(--border);}
-.continue-hint{font-size:12px;color:var(--ink-3);}
-.btn-primary{background:var(--blue);color:white;border:none;padding:9px 22px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:500;cursor:pointer;transition:background 0.15s,transform 0.1s;}
-.btn-primary:hover{background:#1d4ed8;transform:translateY(-1px);}
-.btn-primary:disabled{background:var(--border-strong);color:var(--ink-3);cursor:not-allowed;transform:none;}
+.continue-bar{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:24px;padding-top:16px;border-top:1px solid var(--border);}
+.continue-hint{font-size:11.5px;color:var(--ink-3);font-family:var(--mono);}
+.btn-primary{background:var(--amber);color:#000;border:none;padding:9px 22px;border-radius:var(--radius);font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:0.5px;cursor:pointer;transition:background 0.15s,transform 0.1s;text-transform:uppercase;}
+.btn-primary:hover{background:#fbbf24;transform:translateY(-1px);}
+.btn-primary:disabled{background:var(--border);color:var(--ink-3);cursor:not-allowed;transform:none;}
 
 /* banner CSS removed — using modal */
 
 /* open-ended */
-.open-response-area{width:100%;min-height:100px;border:1px solid var(--border);border-radius:6px;padding:11px 13px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--ink);background:var(--surface);resize:vertical;outline:none;transition:border-color 0.15s;line-height:1.65;}
-.open-response-area:focus{border-color:var(--blue);}
-.char-count{font-size:11px;color:var(--ink-3);text-align:right;margin-top:4px;}
+.open-response-area{width:100%;min-height:110px;border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-family:var(--sans);font-size:14px;color:var(--ink);background:var(--surface-2);resize:vertical;outline:none;transition:border-color 0.15s;line-height:1.7;}
+.open-response-area:focus{border-color:var(--amber);}
+.char-count{font-size:10.5px;color:var(--ink-3);text-align:right;margin-top:4px;font-family:var(--mono);}
 .char-count.ok{color:var(--green);}
 
 /* ═══════════════════════════════════════
@@ -152,60 +155,59 @@ body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font
    ═══════════════════════════════════════ */
 
 /* sticky budget bar */
-.budget-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px 12px;margin-bottom:18px;box-shadow:var(--shadow);position:sticky;top:52px;z-index:100;}
+.budget-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px 10px;margin-bottom:16px;box-shadow:var(--shadow);position:sticky;top:48px;z-index:100;}
 .budget-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;}
-.budget-label{font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-3);}
-.budget-count{font-size:12.5px;color:var(--ink-3);}
-.budget-count strong{font-family:'DM Serif Display',serif;font-size:20px;color:var(--amber);transition:color 0.2s;}
+.budget-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-3);font-family:var(--mono);}
+.budget-count{font-size:11px;color:var(--ink-3);font-family:var(--mono);}
+.budget-count strong{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--amber);transition:color 0.2s;}
 .budget-count strong.full{color:var(--green);}
 
-/* pip row — 10 pips */
-.pip-row{display:flex;gap:6px;margin-bottom:7px;}
-.pip{width:24px;height:24px;border-radius:5px;background:var(--border);transition:background 0.12s,transform 0.1s;}
-.pip.on{background:var(--blue);}
-.pip.on:hover{transform:scale(1.1);}
+/* pip row */
+.pip-row{display:flex;gap:4px;margin-bottom:7px;}
+.pip{width:22px;height:8px;border-radius:2px;background:var(--border);transition:background 0.12s;}
+.pip.on{background:var(--amber);}
 
-.budget-hint{font-size:11.5px;color:var(--ink-3);min-height:15px;}
+.budget-hint{font-size:11px;color:var(--ink-3);min-height:15px;font-family:var(--mono);}
 .budget-hint.ok{color:var(--green);}
 
 /* activity cards */
-.activity-grid{display:flex;flex-direction:column;gap:9px;margin-bottom:28px;}
-.activity-card{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:15px 16px 13px;transition:border-color 0.15s,box-shadow 0.15s;}
-.activity-card.on{border-color:var(--blue-mid);background:var(--blue-pale);box-shadow:0 2px 8px rgba(37,99,235,0.07);}
-.activity-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px;}
-.activity-text{font-size:13.5px;line-height:1.55;color:var(--ink);flex:1;}
+.activity-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;}
+.activity-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px 14px;transition:border-color 0.15s,background 0.15s;}
+.activity-card.on{border-color:rgba(245,158,11,0.5);background:rgba(245,158,11,0.04);}
+.activity-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px;}
+.activity-text{font-size:15px;line-height:1.6;color:var(--ink);flex:1;font-weight:400;}
 .pts-badge{text-align:right;flex-shrink:0;}
-.pts-num{font-family:'DM Serif Display',serif;font-size:26px;line-height:1;color:var(--border-strong);transition:color 0.15s;}
-.pts-num.on{color:var(--blue);}
-.pts-unit{font-size:10px;color:var(--ink-3);letter-spacing:0.5px;text-transform:uppercase;}
+.pts-num{font-family:var(--mono);font-size:28px;line-height:1;color:var(--border-strong);transition:color 0.15s;font-weight:500;}
+.pts-num.on{color:var(--amber);}
+.pts-unit{font-size:9px;color:var(--ink-3);letter-spacing:1px;text-transform:uppercase;font-family:var(--mono);}
 
 /* stepper */
-.stepper{display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
-.step-btn{width:38px;height:34px;background:none;border:none;font-size:20px;color:var(--ink-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.12s;flex-shrink:0;user-select:none;line-height:1;}
-.step-btn:hover:not(:disabled){background:var(--border);}
-.step-btn:disabled{color:var(--border-strong);cursor:not-allowed;}
-.stepper-track{flex:1;height:34px;position:relative;background:var(--surface);overflow:hidden;}
-.stepper-fill{position:absolute;left:0;top:0;bottom:0;background:var(--blue-mid);opacity:0.4;transition:width 0.15s;}
-.stepper-lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--ink-2);user-select:none;}
+.stepper{display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.step-btn{width:42px;height:36px;background:none;border:none;font-size:20px;color:var(--ink-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.12s,color 0.12s;flex-shrink:0;user-select:none;line-height:1;}
+.step-btn:hover:not(:disabled){background:var(--surface-2);color:var(--amber);}
+.step-btn:disabled{color:var(--border);cursor:not-allowed;}
+.stepper-track{flex:1;height:36px;position:relative;background:var(--surface-2);overflow:hidden;}
+.stepper-fill{position:absolute;left:0;top:0;bottom:0;background:rgba(245,158,11,0.2);transition:width 0.15s;}
+.stepper-lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--ink-2);user-select:none;font-family:var(--mono);}
 
 /* completion */
 .completion-screen{display:none;text-align:center;padding:80px 20px;}
 .completion-screen.visible{display:block;}
-.completion-icon{font-size:44px;margin-bottom:16px;}
-.completion-screen h2{font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:10px;}
-.completion-screen p{color:var(--ink-2);font-size:15px;margin-bottom:6px;}
-.redirect-note{font-size:12px;color:var(--ink-3);margin-top:16px;}
+.completion-icon{font-size:44px;margin-bottom:16px;color:var(--green);}
+.completion-screen h2{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--amber);margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;}
+.completion-screen p{color:var(--ink-2);font-size:14px;margin-bottom:6px;}
+.redirect-note{font-size:11px;color:var(--ink-3);margin-top:16px;font-family:var(--mono);}
 </style>
 </head>
 <body>
 <div class="app" id="app">
 
 <nav class="topnav">
-  <div class="nav-logo">Meridian <span>EMPLOYEE PORTAL</span></div>
+  <div class="nav-logo">SYNERTECH <span>EMPLOYEE PORTAL</span></div>
 </nav>
 
 <div id="portalUpdateBar" class="portal-update-bar">
-  <span>⚠</span> <strong>Portal updated</strong> — This portal reflects the organizational changes announced by CEO David Chen.
+  <span>▲</span> <strong>PORTAL UPDATED</strong> — Reflecting organizational changes from the Executive Leadership Team.
 </div>
 
 <div class="memo-overlay" id="memoOverlay"><div class="memo-modal"><div class="memo-top-bar" id="memoTopBar"></div><div class="memo-scroll-body" id="memoScrollBody"></div><div class="scroll-nudge" id="scrollNudge">↓ scroll to read</div><div class="memo-footer"><div class="memo-countdown" id="memoCountdown"><strong id="countdownNum">20</strong></div><button class="btn-memo" id="memoContinueBtn" disabled onclick="dismissMemo()">I have read this announcement →</button></div></div></div>
@@ -233,7 +235,7 @@ body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font
     <div class="page active" id="page-dei">
       <div class="page-header">
         <h2>Inclusion &amp; Belonging</h2>
-        <p>Meridian's commitment to a diverse, equitable, and inclusive workplace</p>
+        <p>Synertech's commitment to a diverse, equitable, and inclusive workplace</p>
       </div>
 
       <div class="card">
@@ -242,7 +244,7 @@ body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font
           <span class="badge badge-green">Active</span>
         </div>
         <div class="card-body" id="dei-card-body">
-          <p style="font-size:13.5px;line-height:1.75;color:var(--ink-2);">Meridian's DEI work is coordinated by the Office of Inclusion, which partners with HR and senior leadership to set goals, track progress, and resource programs across the company. Our initiatives span recruiting, promotion, leadership development, and day-to-day workplace culture.</p>
+          <p style="font-size:13.5px;line-height:1.75;color:var(--ink-2);">Synertech's DEI work is coordinated by the Office of Inclusion, which partners with HR and senior leadership to set goals, track progress, and resource programs across the company. Our initiatives span recruiting, promotion, leadership development, and day-to-day workplace culture.</p>
         </div>
       </div>
 
@@ -270,7 +272,7 @@ body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font
 
     <!-- Employee Groups -->
     <div class="page" id="page-erg">
-      <div class="page-header"><h2>Employee Resource Groups</h2><p>Community, connection, and advocacy across Meridian</p></div>
+      <div class="page-header"><h2>Employee Resource Groups</h2><p>Community, connection, and advocacy across Synertech</p></div>
       <div class="card">
         <div class="card-header"><div class="card-title">ERG Overview</div></div>
         <div class="card-body">
@@ -300,8 +302,7 @@ body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font
       </div>
 
       <div class="card"><div class="card-body">
-        <p style="font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:7px;">In your own words, what do you think will actually change at Meridian as a result of this announcement?</p>
-        <p style="font-size:12.5px;color:var(--ink-3);margin-bottom:13px;">Think about both how the organization may communicate differently and what may change — or stay the same — in actual programs and day-to-day work.</p>
+        <p style="font-size:15px;line-height:1.65;color:var(--ink);margin-bottom:14px;">How do you personally view Synertech's strategy? What do you think this means for DEI initiatives at Synertech?</p>
         <textarea class="open-response-area" id="openResponseText" placeholder="Share your thoughts here..." oninput="onOpenResponseInput()"></textarea>
         <div class="char-count" id="charCount">0 characters — please write at least 30 characters to continue</div>
       </div></div>
@@ -363,7 +364,7 @@ const PID = urlParams.get("PROLIFIC_PID") || urlParams.get("pid") || "";
 
 // ── Actions — shuffled on load ───────────────────────
 const ACTIONS_BASE = [
-  { id:"preserve_erg",      bucket:"preserve",  text:"Attend an upcoming ERG event or affinity group workshop at Meridian." },
+  { id:"preserve_erg",      bucket:"preserve",  text:"Attend an upcoming ERG event or affinity group workshop at Synertech." },
   { id:"preserve_checkin",  bucket:"preserve",  text:"Check in informally with colleagues from underrepresented groups about how they are experiencing the changes." },
   { id:"monitor_track",     bucket:"monitor",   text:"Track whether specific programs (e.g., the Sponsorship Program, Equity in Hiring workshops) continue operating in practice." },
   { id:"monitor_manager",   bucket:"monitor",   text:"Ask your manager directly what will actually change following the announcement." },
@@ -382,9 +383,11 @@ ACTIONS.forEach(a => values[a.id] = 0);
 const MESSAGES = {
   high:{
     cls:"banner-high", icon:"⚠", label:"IMPORTANT COMPANY ANNOUNCEMENT",
-    from:"From: David Chen, Chief Executive Officer · Meridian Corporation",
-    title:"An Update on Our Organizational Structure and Programs",
-    body:`<p>Current actions include:</p>
+    from:"Executive Leadership Team",
+    title:"The Evolution of Our Cultural Strategy",
+    body:`<p>We remain focused on driving our business by creating a sense of belonging for our team, guests and communities through a commitment to inclusion. Belonging for all is an essential part of our team and culture, helping fuel consumer relevance and business results.</p>
+<p>In every area of our business, we are constantly listening, learning and adjusting to set ourselves up for long-term success. As we start a new fiscal year, we're continuing to shape our next chapter at Synertech. These updates streamline our public-facing initiatives and ensures our core organizational goals and accountability structures remain intact.</p>
+<p>Throughout this year, we'll be accelerating action in key areas and implementing changes with the goal of driving growth and staying in step with the evolving external landscape. We will continue to monitor and adjust as needed.</p><p>Current actions include:</p>
 <ul style="margin:0 0 12px 20px;line-height:1.8;">
   <li>Concluding our three-year "Diversity, Equity, and Inclusion" action plan and discontinuing its associated budget allocations, reporting structures, and performance targets.</li>
   <li>Ending our Racial Equity Action and Change (REACH) initiative, including the retirement of its operational milestones, benchmarking systems, and dedicated staffing.</li>
@@ -395,11 +398,13 @@ const MESSAGES = {
   },
   low:{
     cls:"banner-low", icon:"📢", label:"MESSAGE FROM LEADERSHIP",
-    from:"From: David Chen, Chief Executive Officer · Meridian Corporation",
-    title:"Evolving How We Communicate Our Workplace Commitments",
-    body:`<p>Current actions include:</p>
+    from:"Executive Leadership Team",
+    title:"The Evolution of Our Cultural Strategy",
+    body:`<p>We remain focused on driving our business by creating a sense of belonging for our team, guests and communities through a commitment to inclusion. Belonging for all is an essential part of our team and culture, helping fuel consumer relevance and business results.</p>
+<p>In every area of our business, we are constantly listening, learning and adjusting to set ourselves up for long-term success. As we start a new fiscal year, we're continuing to shape our next chapter at Synertech. These updates streamline our public-facing initiatives and ensures our core organizational goals and accountability structures remain intact.</p>
+<p>Throughout this year, we'll be accelerating action in key areas and implementing changes with the goal of driving growth and staying in step with the evolving external landscape. We will continue to monitor and adjust as needed.</p><p>Current actions include:</p>
 <ul style="margin:0 0 12px 20px;line-height:1.8;">
-  <li>Evolving our three-year "Diversity, Equity, and Inclusion" action plan to a "Belonging at Meridian" action plan, ensuring the continuity of the scope, budget, accountability structures, and performance goals.</li>
+  <li>Evolving our three-year "Diversity, Equity, and Inclusion" action plan to a "Belonging at Synertech" action plan, ensuring the continuity of the scope, budget, accountability structures, and performance goals.</li>
   <li>Renaming our "Racial Equity Action and Change" initiative to "Radical Engagement for Action and Change" (REACH), while maintaining our established operational milestones and performance benchmarks.</li>
   <li>Integrating demographic-based employee resource groups into a central inclusive development and mentorship model, with continued budget support and sponsorship from leadership.</li>
   <li>Optimizing stakeholder communication strategy to emphasize talent sustainability and belonging. While external language will shift, internal representation tracking, advancement metrics, demographic reporting, and progress targets will continue.</li>
@@ -411,8 +416,8 @@ const MESSAGES = {
 // ── Post-announcement portal content ────────────────
 const POST = {
   high:{
-    deiHeader:`<div><div class="card-title">Belonging at Meridian</div><div class="card-subtitle">Updated following CEO announcement</div></div>`,
-    deiBody:`<div class="notice-box warning">The Office of Inclusion has been dissolved. HR Business Partners will absorb relevant responsibilities.</div><p style="font-size:13.5px;line-height:1.75;color:var(--ink-2);">Meridian is transitioning away from formal DEI programming. Further details on how workplace culture initiatives will be structured going forward will be communicated by HR.</p>`,
+    deiHeader:`<div><div class="card-title">Belonging at Synertech</div><div class="card-subtitle">Updated following CEO announcement</div></div>`,
+    deiBody:`<div class="notice-box warning">The Office of Inclusion has been dissolved. HR Business Partners will absorb relevant responsibilities.</div><p style="font-size:13.5px;line-height:1.75;color:var(--ink-2);">Synertech is transitioning away from formal DEI programming. Further details on how workplace culture initiatives will be structured going forward will be communicated by HR.</p>`,
     programs:`<div class="notice-box warning">The following programs have been discontinued. Employees currently enrolled will be contacted by HR.</div>
 <div class="prog-list">
   <div class="prog-row discontinued"><div class="prog-dot" style="background:#9ca3af"></div><div class="prog-name">Inclusive Leadership Certification</div><span class="badge badge-red">Discontinued</span></div>
@@ -438,7 +443,7 @@ const POST = {
   },
   low:{
     deiHeader:`<div><div class="card-title">Inclusion &amp; Belonging</div><div class="card-subtitle">Office of Inclusion · Updated following CEO announcement</div></div><span class="badge badge-green">Active</span>`,
-    deiBody:`<div class="notice-box success">Our internal DEI programs and the Office of Inclusion remain fully operational. Budget and staffing are unchanged.</div><p style="font-size:13.5px;line-height:1.75;color:var(--ink-2);">Meridian's DEI work continues as before. The Office of Inclusion remains fully staffed, and all programs, ERGs, and initiatives are unaffected by recent changes to our external communications.</p>`,
+    deiBody:`<div class="notice-box success">Our internal DEI programs and the Office of Inclusion remain fully operational. Budget and staffing are unchanged.</div><p style="font-size:13.5px;line-height:1.75;color:var(--ink-2);">Synertech's DEI work continues as before. The Office of Inclusion remains fully staffed, and all programs, ERGs, and initiatives are unaffected by recent changes to our external communications.</p>`,
     programs:`<div class="notice-box success">All programs below continue as scheduled. Recent changes to external communications do not affect internal programming.</div>
 <div class="prog-list">
   <div class="prog-row"><div class="prog-dot" style="background:#2563eb"></div><div class="prog-name">Inclusive Leadership Certification</div><span class="badge badge-blue">Required — Managers</span></div>
@@ -492,12 +497,12 @@ function advanceToAnnouncement(){
 
   document.getElementById("memoScrollBody").innerHTML = `
     <div class="memo-letterhead">
-      <div><div class="memo-org">Meridian Corporation</div><div class="memo-org-sub">Internal Communications</div></div>
+      <div><div class="memo-org">Synertech</div><div class="memo-org-sub">Cultural Strategy · All Employees</div></div>
       <div class="memo-date">${dateStr}</div>
     </div>
     <div class="memo-fields">
       <div class="memo-field"><span class="memo-field-label">FROM:</span><span class="memo-field-value">${msg.from}</span></div>
-      <div class="memo-field"><span class="memo-field-label">TO:</span><span class="memo-field-value">All Meridian Employees</span></div>
+      <div class="memo-field"><span class="memo-field-label">TO:</span><span class="memo-field-value">All Synertech Employees</span></div>
     </div>
     <div class="memo-subject">${msg.title}</div>
     <div class="memo-body">${msg.body}</div>`;
@@ -567,7 +572,7 @@ function dismissMemo(){
     const prompt = document.createElement("div");
     prompt.className = "notice-box info portal-prompt";
     prompt.style.marginBottom = "14px";
-    prompt.innerHTML = `<strong>Next step:</strong> The portal has been updated. Review the current state of Meridian's programs, then click <strong>Your Reaction</strong> in the sidebar when ready.`;
+    prompt.innerHTML = `<strong>Next step:</strong> The portal has been updated. Review the current state of Synertech's programs, then click <strong>Your Reaction</strong> in the sidebar when ready.`;
     const hdr = deiPage.querySelector(".page-header");
     if(hdr) deiPage.insertBefore(prompt, hdr);
   }
