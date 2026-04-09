@@ -190,6 +190,46 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
 .stepper-fill{position:absolute;left:0;top:0;bottom:0;background:rgba(245,158,11,0.2);transition:width 0.15s;}
 .stepper-lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--ink-2);user-select:none;font-family:var(--mono);}
 
+/* nudge popup */
+.nudge-overlay{display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px);align-items:center;justify-content:center;padding:24px;}
+.nudge-overlay.visible{display:flex;}
+.nudge-modal{background:var(--surface);border:1px solid var(--border-strong);border-left:3px solid var(--amber);border-radius:var(--radius);padding:28px 28px 22px;max-width:420px;width:100%;box-shadow:0 16px 40px rgba(0,0,0,0.5);animation:slideModal 0.25s ease;}
+.nudge-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:10px;}
+.nudge-text{font-size:15px;line-height:1.65;color:var(--ink);margin-bottom:20px;}
+.nudge-btn{background:var(--amber);color:#000;border:none;padding:9px 20px;border-radius:var(--radius);font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;}
+.nudge-btn:hover{background:#fbbf24;}
+
+/* homepage */
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.home-widget{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;cursor:default;}
+.home-widget-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;}
+.home-widget-val{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--ink);line-height:1;}
+.home-widget-sub{font-size:11.5px;color:var(--ink-3);margin-top:4px;}
+.home-announce{background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;}
+.home-announce-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;}
+.home-announce-text{font-size:13.5px;color:var(--ink-2);line-height:1.6;}
+.home-links{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.home-link{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:border-color 0.15s,background 0.15s;}
+.home-link:hover{border-color:var(--border-strong);background:var(--surface-2);}
+.home-link-name{font-size:13.5px;color:var(--ink);}
+.home-link-arrow{font-size:12px;color:var(--ink-3);}
+
+.dei-link-row{opacity:0.35;pointer-events:none;cursor:not-allowed;}
+.dei-link-row.unlocked{opacity:1;pointer-events:auto;cursor:pointer;border-color:rgba(245,158,11,0.4);background:rgba(245,158,11,0.04);}
+.dei-link-row.unlocked:hover{border-color:var(--amber);background:rgba(245,158,11,0.1);}
+.dei-link-name{color:var(--amber) !important;font-weight:500;}
+.dei-link-arrow{color:var(--amber) !important;}
+
+/* manipulation check scale */
+.mc-scale{margin-top:4px;}
+.mc-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-3);font-family:var(--mono);margin-bottom:10px;}
+.mc-options{display:flex;gap:8px;}
+.mc-opt{flex:1;cursor:pointer;}
+.mc-opt input{display:none;}
+.mc-opt span{display:flex;align-items:center;justify-content:center;height:44px;border:1.5px solid var(--border);border-radius:var(--radius);font-family:var(--mono);font-size:15px;font-weight:500;color:var(--ink-2);transition:all 0.12s;cursor:pointer;}
+.mc-opt input:checked + span{background:var(--amber);border-color:var(--amber);color:#000;}
+.mc-opt:hover span{border-color:var(--amber);color:var(--amber);}
+
 /* portal CTA card */
 .portal-cta-card{background:var(--surface);border:1px solid var(--border-strong);border-left:3px solid var(--amber);border-radius:var(--radius);padding:18px 20px;margin-bottom:18px;box-shadow:var(--shadow-md);}
 .portal-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;}
@@ -221,23 +261,96 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
 <div class="main-body">
   <aside class="sidebar">
     <div class="sidebar-section">
-      <div class="sidebar-label">Workplace</div>
-      <div class="sidebar-item active" onclick="showPage('dei')" id="nav-dei"><span class="sidebar-icon">◈</span> Inclusion &amp; Belonging</div>
-    </div>
-    <div class="sidebar-section">
       <div class="sidebar-label">My Portal</div>
       <div class="sidebar-item" id="nav-openended" style="display:none;color:#2563eb;font-weight:500;" onclick="showPage('openended')"><span class="sidebar-icon">💬</span> Your Reaction</div>
-      <div class="sidebar-item" id="nav-instructions" style="display:none;color:#2563eb;font-weight:500;" onclick="showPage('instructions')"><span class="sidebar-icon">📋</span> Priority Planner</div>
+      <div class="sidebar-item" id="nav-mc" style="display:none;" hidden></div>
+      <div class="sidebar-item" id="nav-instructions" style="display:none;" hidden></div>
       <div class="sidebar-item" id="nav-planner" style="display:none;" onclick="showPage('planner')" hidden></div>
     </div>
   </aside>
 
   <main class="content" id="contentArea">
 
+    <!-- ══════════════ HOMEPAGE ══════════════ -->
+
+    <div class="page active" id="page-home">
+      <div class="page-header">
+        <h2>Synertech Employee Portal</h2>
+        <p>Welcome to the Synertech Employee Portal. Review the portal to learn more about the company.</p>
+      </div>
+
+      <!-- Quick stats -->
+      <div class="home-grid">
+        <div class="home-widget">
+          <div class="home-widget-label">PTO Balance</div>
+          <div class="home-widget-val">14.5</div>
+          <div class="home-widget-sub">days available</div>
+        </div>
+        <div class="home-widget">
+          <div class="home-widget-label">Next Review</div>
+          <div class="home-widget-val">Q3</div>
+          <div class="home-widget-sub">July 14 · 90-day cycle</div>
+        </div>
+      </div>
+
+      <!-- Announcements -->
+      <div class="home-announce">
+        <div class="home-announce-label">Company News</div>
+        <div class="home-announce-text">Q1 earnings call recap now available in the Investor Relations section. Synertech reported 8.4% YoY revenue growth driven by enterprise SaaS expansion.</div>
+      </div>
+
+      <!-- Portal links -->
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px;">Portal Sections</div>
+      <div class="home-links">
+        <div class="home-link" onclick="showHome('learning')"><span class="home-link-name">📚 &nbsp;Learning &amp; Development</span><span class="home-link-arrow">→</span></div>
+        <div class="home-link" onclick="showHome('it')"><span class="home-link-name">🖥 &nbsp;IT &amp; Equipment</span><span class="home-link-arrow">→</span></div>
+        <div class="home-link" onclick="showHome('policies')"><span class="home-link-name">📋 &nbsp;Policies &amp; Handbook</span><span class="home-link-arrow">→</span></div>
+        <div class="home-link dei-link-row" id="deiLinkRow" onclick="enterDEI()"><span class="home-link-name dei-link-name">◈ &nbsp;Diversity, Equity &amp; Inclusion</span><span class="home-link-arrow dei-link-arrow">→</span></div>
+      </div>
+
+
+    </div>
+
+    <!-- Stub pages for home navigation -->
+    <div class="page" id="page-learning">
+      <div class="page-header"><h2>Learning &amp; Development</h2><p>Courses, certifications, and growth resources</p></div>
+      <div class="card"><div class="card-body">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="prog-row"><div class="prog-dot" style="background:var(--blue)"></div><div class="prog-name">Leadership Excellence Certification</div><span class="badge badge-blue">In progress</span></div>
+          <div class="prog-row"><div class="prog-dot" style="background:var(--green)"></div><div class="prog-name">Data Literacy</div><span class="badge badge-green">Completed</span></div>
+          <div class="prog-row"><div class="prog-dot" style="background:var(--amber)"></div><div class="prog-name">Synertech Product Deep Dive · Q2</div><span class="badge badge-amber">Upcoming</span></div>
+        </div>
+      </div></div>
+      <div class="continue-bar"><button class="btn-primary" onclick="showPage('home');">← Back to Dashboard</button></div>
+    </div>
+    <div class="page" id="page-it">
+      <div class="page-header"><h2>IT &amp; Equipment</h2><p>Hardware requests, software access, and support tickets</p></div>
+      <div class="card"><div class="card-body">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="prog-row"><div class="prog-dot" style="background:var(--green)"></div><div class="prog-name">MacBook Pro 14" · SYN-04821</div><span class="badge badge-green">Assigned</span></div>
+          <div class="prog-row"><div class="prog-dot" style="background:var(--green)"></div><div class="prog-name">Okta SSO · Single sign-on active</div><span class="badge badge-green">Active</span></div>
+          <div class="prog-row"><div class="prog-dot" style="background:var(--amber)"></div><div class="prog-name">Open ticket #8841 · Monitor request</div><span class="badge badge-amber">Pending</span></div>
+        </div>
+      </div></div>
+      <div class="continue-bar"><button class="btn-primary" onclick="showPage('home');">← Back to Dashboard</button></div>
+    </div>
+    <div class="page" id="page-policies">
+      <div class="page-header"><h2>Policies &amp; Handbook</h2><p>Company policies, code of conduct, and employee handbook</p></div>
+      <div class="card"><div class="card-body">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="prog-row"><div class="prog-dot" style="background:var(--blue)"></div><div class="prog-name">Code of Business Conduct · 2025</div><span class="badge badge-blue">Current</span></div>
+          <div class="prog-row"><div class="prog-dot" style="background:var(--blue)"></div><div class="prog-name">Remote &amp; Hybrid Work Policy</div><span class="badge badge-blue">Current</span></div>
+          <div class="prog-row"><div class="prog-dot" style="background:var(--blue)"></div><div class="prog-name">PTO &amp; Leave Guidelines</div><span class="badge badge-blue">Current</span></div>
+          <div class="prog-row"><div class="prog-dot" style="background:var(--amber)"></div><div class="prog-name">AI &amp; Data Use Policy · Draft</div><span class="badge badge-amber">Under review</span></div>
+        </div>
+      </div></div>
+      <div class="continue-bar"><button class="btn-primary" onclick="showPage('home');">← Back to Dashboard</button></div>
+    </div>
+
     <!-- ══════════════ PRE-ANNOUNCEMENT PORTAL ══════════════ -->
 
     <!-- Inclusion & Belonging -->
-    <div class="page active" id="page-dei">
+    <div class="page" id="page-dei">
       <div class="page-header">
         <h2>Inclusion &amp; Belonging</h2>
         <p>Synertech's Office of Inclusion · Workplace programs and initiatives</p>
@@ -272,7 +385,40 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
       </div></div>
 
       <div class="continue-bar">
-        <button class="btn-primary" id="openResponseBtn" onclick="advanceToInstructions()">Continue →</button>
+        <button class="btn-primary" id="openResponseBtn" onclick="advanceToMC()">Continue →</button>
+      </div>
+    </div>
+
+    <!-- ══════════════ MANIPULATION CHECK ══════════════ -->
+
+    <div class="page" id="page-mc">
+      <div class="page-header">
+        <h2>Quick Question</h2>
+        <p>Please respond to the following statement before continuing.</p>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <p style="font-size:16px;line-height:1.7;color:var(--ink);margin-bottom:22px;">"Synertech is making substantive changes to its operation, rather than just adjusting its language."</p>
+          <div class="mc-scale">
+            <div class="mc-labels">
+              <span>Strongly disagree</span>
+              <span>Strongly agree</span>
+            </div>
+            <div class="mc-options" id="mcOptions">
+              <label class="mc-opt" id="mc-opt-1"><input type="radio" name="mc_align" value="1"><span>1</span></label>
+              <label class="mc-opt" id="mc-opt-2"><input type="radio" name="mc_align" value="2"><span>2</span></label>
+              <label class="mc-opt" id="mc-opt-3"><input type="radio" name="mc_align" value="3"><span>3</span></label>
+              <label class="mc-opt" id="mc-opt-4"><input type="radio" name="mc_align" value="4"><span>4</span></label>
+              <label class="mc-opt" id="mc-opt-5"><input type="radio" name="mc_align" value="5"><span>5</span></label>
+              <label class="mc-opt" id="mc-opt-6"><input type="radio" name="mc_align" value="6"><span>6</span></label>
+              <label class="mc-opt" id="mc-opt-7"><input type="radio" name="mc_align" value="7"><span>7</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="continue-bar">
+        <span class="continue-hint" id="mcHint">Select a response to continue</span>
+        <button class="btn-primary" id="mcBtn" disabled onclick="advanceToInstructions()">Continue →</button>
       </div>
     </div>
 
@@ -285,10 +431,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
       </div>
       <div class="card">
         <div class="card-body" style="font-size:15px;line-height:1.75;color:var(--ink);">
-          <p style="margin-bottom:14px;">On the next page, you will see a list of activities. Imagine you are an employee at Synertech.</p>
-          <p style="margin-bottom:14px;">You have <strong style="color:var(--amber);">10 points</strong> to distribute across these activities. Each point represents a share of your attention and energy over the coming month in response to the announcement you just read.</p>
-          <p style="margin-bottom:14px;">Allocate <strong>more points</strong> to activities you would actually prioritize, and <strong>fewer points</strong> (or zero) to activities you would not. Your points must add up to exactly 10.</p>
-          <p style="color:var(--ink-2);">There are no right or wrong answers — we are interested in what you would genuinely do.</p>
+          <p style="margin-bottom:14px;">On the next page, you will see a list of activities. You have <strong style="color:var(--amber);">10 points</strong> to distribute across these activities. Each point represents a share of your attention and energy over the coming month in response to the announcement you just read.</p>
+          <p>Allocate <strong>more points</strong> to activities you would actually prioritize, and <strong>fewer points</strong> (or zero) to activities you would not. Your points must add up to exactly 10.</p>
         </div>
       </div>
       <div class="continue-bar">
@@ -332,6 +476,14 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
   <div class="redirect-note" id="redirectNote">Returning to the survey...</div>
 </div>
 
+<div class="nudge-overlay" id="nudgeOverlay">
+  <div class="nudge-modal">
+    <div class="nudge-label">Next Step</div>
+    <div class="nudge-text">Please navigate to the <strong>Diversity, Equity &amp; Inclusion</strong> section in the portal to continue.</div>
+    <button class="nudge-btn" onclick="dismissNudge()">Go to Diversity, Equity &amp; Inclusion →</button>
+  </div>
+</div>
+
 </div><!-- /.app -->
 
 <script>
@@ -346,11 +498,9 @@ const PID = urlParams.get("PROLIFIC_PID") || urlParams.get("pid") || "";
 // ── Actions — shuffled on load ───────────────────────
 const ACTIONS_BASE = [
   { id:"preserve_erg",      bucket:"preserve",  text:"Attend an upcoming ERG event or affinity group workshop at Synertech." },
-  { id:"preserve_checkin",  bucket:"preserve",  text:"Check in informally with colleagues from underrepresented groups about how they are experiencing the changes." },
   { id:"monitor_track",     bucket:"monitor",   text:"Track whether specific programs (e.g., the Sponsorship Program, Equity in Hiring workshops) continue operating in practice." },
   { id:"monitor_manager",   bucket:"monitor",   text:"Ask your manager directly what will actually change following the announcement." },
   { id:"challenge_manager", bucket:"challenge", text:"Raise concerns about the announcement directly with your manager or in a team meeting." },
-  { id:"challenge_collab",  bucket:"challenge", text:"Organize with coworkers to collectively raise concerns about the changes." },
   { id:"withdraw_exit",     bucket:"withdraw",  text:"Update your resume and explore job opportunities at other organizations." },
   { id:"donothing",         bucket:"donothing", text:"Continue your normal work routine without taking any specific action in response to the announcement." },
 ];
@@ -447,6 +597,41 @@ const POST = {
 </div>`
   }
 };
+
+// ── Homepage navigation helper ───────────────────────
+function showHome(section){
+  showPage(section);
+}
+
+// ── Enter DEI (begins experiment) ────────────────────
+function enterDEI(){
+  showPage('dei');
+}
+
+// ── Homepage 30-second timer ──────────────────────────
+let homeTimerStarted = false;
+function startHomeTimer(){
+  if(homeTimerStarted) return;
+  homeTimerStarted = true;
+  const UNLOCK_AT = 30;
+  const NUDGE_AT  = 90;
+  // Unlock DEI link at 30s
+  setTimeout(()=>{
+    document.getElementById('deiLinkRow').classList.add('unlocked');
+  }, UNLOCK_AT * 1000);
+  // Show nudge if still on home at 90s
+  setTimeout(()=>{
+    const currentPage = document.querySelector('.page.active');
+    if(currentPage && currentPage.id === 'page-home'){
+      document.getElementById('nudgeOverlay').classList.add('visible');
+    }
+  }, NUDGE_AT * 1000);
+}
+
+function dismissNudge(){
+  document.getElementById('nudgeOverlay').classList.remove('visible');
+  enterDEI();
+}
 
 // ── Navigation ───────────────────────────────────────
 function showPage(id){
@@ -564,6 +749,21 @@ function dismissMemo(){
 }
 
 // ── Open-ended (no minimum required) ─────────────────
+
+// ── Advance to manipulation check ───────────────────────
+function advanceToMC(){
+  document.getElementById("nav-mc").style.display = "flex";
+  showPage("mc");
+}
+
+// ── Manipulation check radio handling ────────────────────
+document.addEventListener("change", function(e){
+  if(e.target.name === "mc_align"){
+    document.getElementById("mcBtn").disabled = false;
+    document.getElementById("mcHint").textContent = "Ready to continue";
+    document.getElementById("mcHint").style.color = "var(--green)";
+  }
+});
 
 // ── Advance to instructions interstitial ─────────────
 function advanceToInstructions(){
@@ -696,6 +896,8 @@ function handleSubmit(){
 
   const openText = (document.getElementById("openResponseText")||{}).value||"";
   params.set("open_response", encodeURIComponent(openText.trim()));
+  const mcVal = document.querySelector('input[name="mc_align"]:checked');
+  params.set("mc_alignment", mcVal ? mcVal.value : "");
   if(PID) params.set("PROLIFIC_PID", PID);
 
   document.getElementById("app").style.display = "none";
@@ -705,6 +907,8 @@ function handleSubmit(){
     window.location.href = `${QUALTRICS_RETURN_URL}?${params.toString()}`;
   }, 1800);
 }
+// Start homepage timer on load
+startHomeTimer();
 </script>
 </body>
 </html>
