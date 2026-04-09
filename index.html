@@ -488,7 +488,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
 
 <script>
 // ── Config ──────────────────────────────────────────
-const QUALTRICS_RETURN_URL = "https://columbia.qualtrics.com/jfe/form/SV_88lQQha6Y1Z6ho2"; // ← REPLACE
+const QUALTRICS_RETURN_URL = new URLSearchParams(window.location.search).get("return_url")
+  || "https://columbia.qualtrics.com/jfe/form/SV_88lQQha6Y1Z6ho2";
 const TOTAL   = 10;
 const N_PIPS  = 10;
 const urlParams = new URLSearchParams(window.location.search);
