@@ -488,8 +488,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
 
 <script>
 // ── Config ──────────────────────────────────────────
-const QUALTRICS_RETURN_URL = new URLSearchParams(window.location.search).get("return_url")
-  || "https://columbia.qualtrics.com/jfe/form/SV_88lQQha6Y1Z6ho2";
+const QUALTRICS_RETURN_URL = "https://columbia.qualtrics.com/jfe/form/SV_88lQQha6Y1Z6ho2"; // ← REPLACE
 const TOTAL   = 10;
 const N_PIPS  = 10;
 const urlParams = new URLSearchParams(window.location.search);
@@ -882,30 +881,44 @@ function refreshBudget(){
 }
 
 // ── Submit ───────────────────────────────────────────
+// ← REPLACE with your deployed Apps Script URL
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx2on-aM9NElEhM4lJadiXIx760tEQlzh4fGt5KBw4RBpZydPMEKD2Q5YgvVT85PDuE/exec";
+// ← REPLACE with your Qualtrics Part 2 survey URL
+const QUALTRICS_PART2_URL = "https://columbia.qualtrics.com/jfe/form/SV_PART2SURVEYID";
+
 function handleSubmit(){
   if(getTotal()!==TOTAL) return;
 
-  const params = new URLSearchParams();
-  params.set("condition", CONDITION);
-  ACTIONS.forEach(a=>{
-    params.set(a.id, values[a.id]);
-    params.set(a.id+"_bucket", a.bucket);
-  });
+  // Build data payload
+  const openText = (document.getElementById("openResponseText")||{}).value||"";
+  const mcVal = document.querySelector('input[name="mc_align"]:checked');
+
   const buckets = {};
   ACTIONS.forEach(a=>{ buckets[a.bucket]=(buckets[a.bucket]||0)+values[a.id]; });
-  Object.entries(buckets).forEach(([b,v])=>params.set("total_"+b, v));
 
-  const openText = (document.getElementById("openResponseText")||{}).value||"";
-  params.set("open_response", encodeURIComponent(openText.trim()));
-  const mcVal = document.querySelector('input[name="mc_align"]:checked');
-  params.set("mc_alignment", mcVal ? mcVal.value : "");
-  if(PID) params.set("PROLIFIC_PID", PID);
+  const data = { condition: CONDITION, PROLIFIC_PID: PID, open_response: openText.trim(),
+    mc_alignment: mcVal ? mcVal.value : "" };
+  ACTIONS.forEach(a=>{ data[a.id]=values[a.id]; data[a.id+"_bucket"]=a.bucket; });
+  Object.entries(buckets).forEach(([b,v])=>{ data["total_"+b]=v; });
 
+  // Show completion screen immediately
   document.getElementById("app").style.display = "none";
   document.getElementById("completionScreen").classList.add("visible");
+
+  // POST to Google Apps Script (no-cors so we fire-and-forget)
+  fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  }).catch(()=>{});
+
+  // Redirect to Qualtrics Part 2 after short delay, passing PID
   setTimeout(()=>{
     document.getElementById("redirectNote").textContent = "Redirecting now...";
-    window.location.href = `${QUALTRICS_RETURN_URL}?${params.toString()}`;
+    window.location.href = QUALTRICS_PART2_URL +
+      "?PROLIFIC_PID=" + encodeURIComponent(PID) +
+      "&condition=" + encodeURIComponent(CONDITION);
   }, 1800);
 }
 // Start homepage timer on load
