@@ -4,265 +4,313 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Synertech Employee Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#111318; --surface:#1a1d26; --surface-2:#21242f;
-  --border:#2e3340; --border-strong:#404760;
-  --ink:#f0f2f7; --ink-2:#b0bad0; --ink-3:#6a7590;
-  --blue:#3b82f6; --blue-pale:rgba(59,130,246,0.1); --blue-mid:rgba(59,130,246,0.3);
-  --green:#22c55e; --green-pale:rgba(34,197,94,0.1); --green-mid:rgba(34,197,94,0.3);
-  --amber:#f59e0b; --amber-pale:rgba(245,158,11,0.1);
-  --red:#ef4444; --red-pale:rgba(239,68,68,0.1);
-  --grey:#6b7280; --grey-pale:rgba(107,114,128,0.15);
-  --accent:#0d0f12; --radius:4px;
-  --shadow:0 1px 3px rgba(0,0,0,0.4),0 1px 2px rgba(0,0,0,0.3);
-  --shadow-md:0 4px 12px rgba(0,0,0,0.5);
-  --mono:'IBM Plex Mono',monospace;
-  --sans:'IBM Plex Sans',sans-serif;
-  --serif:'IBM Plex Serif',serif;
+:root{
+  /* Modern biotech palette — white bg, teal/emerald primary, soft blue secondary */
+  --bg:#f7fafb;
+  --surface:#ffffff;
+  --surface-2:#f1f5f7;
+  --border:#e2e8ec;
+  --border-strong:#cbd5db;
+
+  --ink:#0f172a;
+  --ink-2:#475569;
+  --ink-3:#94a3b8;
+
+  /* Primary: teal/emerald */
+  --teal:#0d9488;
+  --teal-dark:#0f766e;
+  --teal-pale:#ccfbf1;
+  --teal-soft:#f0fdfa;
+
+  /* Secondary: soft blue */
+  --blue:#3b82f6;
+  --blue-pale:#dbeafe;
+  --blue-soft:#eff6ff;
+
+  /* Accent greens/ambers/reds for status badges */
+  --green:#10b981;
+  --green-pale:#d1fae5;
+  --amber:#f59e0b;
+  --amber-pale:#fef3c7;
+  --red:#dc2626;
+  --red-pale:#fee2e2;
+  --grey:#64748b;
+  --grey-pale:#e2e8f0;
+
+  --radius:6px;
+  --radius-lg:10px;
+  --shadow-sm:0 1px 2px rgba(15,23,42,0.04);
+  --shadow:0 1px 3px rgba(15,23,42,0.06),0 1px 2px rgba(15,23,42,0.04);
+  --shadow-md:0 4px 12px rgba(15,23,42,0.08);
+  --shadow-lg:0 20px 40px rgba(15,23,42,0.12);
+
+  --sans:'Inter','-apple-system',BlinkMacSystemFont,'Segoe UI',sans-serif;
 }
+
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;min-height:100vh;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;min-height:100vh;-webkit-font-smoothing:antialiased;}
 .app{display:flex;flex-direction:column;min-height:100vh;}
 
 /* nav */
-.topnav{background:#000;color:white;display:flex;align-items:center;padding:0 28px;height:48px;flex-shrink:0;position:sticky;top:0;z-index:200;border-bottom:1px solid var(--border);}
-.nav-logo{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--amber);letter-spacing:2px;text-transform:uppercase;}
-.nav-logo span{color:var(--ink-3);font-size:11px;margin-left:12px;letter-spacing:1.5px;font-family:var(--mono);}
+.topnav{background:var(--surface);color:var(--ink);display:flex;align-items:center;padding:0 28px;height:56px;flex-shrink:0;position:sticky;top:0;z-index:200;border-bottom:1px solid var(--border);box-shadow:var(--shadow-sm);}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-0.2px;}
+.nav-logo-mark{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,var(--teal) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;}
+.nav-logo-sub{color:var(--ink-3);font-size:12px;font-weight:400;margin-left:6px;}
 
-/* portal update bar — high condition only */
-.portal-update-bar{display:none;background:#1a0000;color:rgba(255,100,100,0.85);font-size:11px;padding:5px 28px;align-items:center;gap:8px;border-bottom:1px solid rgba(239,68,68,0.4);font-family:var(--mono);letter-spacing:0.3px;}
-.portal-update-bar strong{color:var(--red);}
+/* portal update bar */
+.portal-update-bar{display:none;background:#fef2f2;color:#991b1b;font-size:12px;padding:8px 28px;align-items:center;gap:8px;border-bottom:1px solid #fecaca;font-weight:500;}
+.portal-update-bar strong{color:var(--red);font-weight:600;}
 
-/* announcement modal overlay */
-.memo-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(15,20,30,0.82);backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:24px 16px;animation:fadeOverlay 0.35s ease;}
+/* welcome overlay */
+.welcome-overlay{display:none;position:fixed;inset:0;z-index:1100;background:rgba(15,23,42,0.5);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:24px;animation:fadeOverlay 0.3s ease;}
+.welcome-overlay.visible{display:flex;}
+.welcome-modal{background:var(--surface);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);width:100%;max-width:460px;padding:32px 32px 24px;text-align:center;animation:slideModal 0.3s ease;}
+.welcome-icon{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--teal) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:white;font-size:24px;}
+.welcome-title{font-size:20px;font-weight:600;color:var(--ink);margin-bottom:10px;letter-spacing:-0.3px;}
+.welcome-body{font-size:14.5px;line-height:1.65;color:var(--ink-2);margin-bottom:22px;}
+.btn-welcome{background:var(--teal);color:white;border:none;padding:11px 26px;border-radius:var(--radius);font-family:var(--sans);font-size:13.5px;font-weight:500;cursor:pointer;transition:background 0.15s;}
+.btn-welcome:hover:not(:disabled){background:var(--teal-dark);}
+.btn-welcome:disabled{background:var(--border-strong);color:white;cursor:not-allowed;opacity:0.7;}
+
+/* announcement modal */
+.memo-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(15,23,42,0.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:24px 16px;animation:fadeOverlay 0.35s ease;}
 .memo-overlay.visible{display:flex;}
 @keyframes fadeOverlay{from{opacity:0;}to{opacity:1;}}
-.memo-modal{background:#13161f;border:1px solid var(--border);border-radius:4px;box-shadow:0 24px 60px rgba(0,0,0,0.7);width:100%;max-width:680px;max-height:88vh;display:flex;flex-direction:column;animation:slideModal 0.3s ease;overflow:hidden;}
+.memo-modal{background:var(--surface);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);width:100%;max-width:680px;max-height:88vh;display:flex;flex-direction:column;animation:slideModal 0.3s ease;overflow:hidden;}
 @keyframes slideModal{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
-.memo-top-bar{flex-shrink:0;padding:11px 20px;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
-.memo-top-bar.high{background:#dc2626;color:white;font-family:var(--mono);}
-.memo-top-bar.low{background:#1d4ed8;color:white;font-family:var(--mono);}
-.memo-scroll-body{flex:1;overflow-y:auto;padding:28px 32px 20px;background:#13161f;}
+.memo-top-bar{flex-shrink:0;padding:12px 22px;font-size:12px;font-weight:600;letter-spacing:0.4px;text-transform:uppercase;display:flex;align-items:center;gap:8px;color:white;}
+.memo-top-bar.high{background:var(--red);}
+.memo-top-bar.low{background:var(--blue);}
+.memo-scroll-body{flex:1;overflow-y:auto;padding:28px 34px 20px;background:var(--surface);}
 .memo-letterhead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
-.memo-org{font-family:var(--mono);font-size:16px;font-weight:500;color:var(--amber);letter-spacing:1px;}
-.memo-org-sub{font-size:10px;color:var(--ink-3);margin-top:3px;font-family:var(--mono);letter-spacing:0.5px;}
-.memo-date{font-size:11px;color:var(--ink-3);text-align:right;font-family:var(--mono);}
+.memo-org{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;color:var(--ink);letter-spacing:-0.3px;}
+.memo-org-mark{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,var(--teal) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;}
+.memo-org-sub{font-size:11.5px;color:var(--ink-3);margin-top:4px;font-weight:400;}
+.memo-date{font-size:12px;color:var(--ink-3);text-align:right;}
 .memo-fields{margin-bottom:16px;}
-.memo-field{display:flex;gap:8px;font-size:11.5px;margin-bottom:4px;font-family:var(--mono);}
-.memo-field-label{font-weight:500;color:var(--ink-3);min-width:52px;text-transform:uppercase;letter-spacing:0.5px;}
+.memo-field{display:flex;gap:10px;font-size:12.5px;margin-bottom:4px;}
+.memo-field-label{font-weight:600;color:var(--ink-3);min-width:52px;text-transform:uppercase;letter-spacing:0.3px;font-size:11px;padding-top:1px;}
 .memo-field-value{color:var(--ink-2);}
-.memo-subject{font-family:var(--mono);font-size:15px;font-weight:500;color:var(--ink);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);letter-spacing:0.3px;}
-.memo-body{font-size:14.5px;line-height:1.85;color:var(--ink-2);}
+.memo-subject{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);letter-spacing:-0.2px;}
+.memo-body{font-size:14.5px;line-height:1.75;color:var(--ink-2);}
 .memo-body p{margin-bottom:12px;}
 .memo-body p:last-child{margin-bottom:0;}
-.scroll-nudge{text-align:center;font-size:11px;color:var(--ink-3);padding:8px 0 2px;animation:nudgeBob 2s ease-in-out infinite;flex-shrink:0;font-family:var(--mono);}
+.memo-body ul{margin:0 0 12px 20px;line-height:1.75;}
+.memo-body ul li{margin-bottom:6px;}
+.scroll-nudge{text-align:center;font-size:11.5px;color:var(--ink-3);padding:8px 0 2px;animation:nudgeBob 2s ease-in-out infinite;flex-shrink:0;}
 @keyframes nudgeBob{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
 .scroll-nudge.hidden{display:none;}
-.memo-footer{flex-shrink:0;padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#1a1d26;}
+.memo-footer{flex-shrink:0;padding:14px 22px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);}
 .memo-countdown{display:none;}
-.btn-memo{background:var(--amber);color:#000;border:none;padding:9px 22px;border-radius:var(--radius);font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;transition:background 0.15s;}
-.btn-memo:hover:not(:disabled){background:#fbbf24;}
-.btn-memo:disabled{background:var(--border);color:var(--ink-3);cursor:not-allowed;}
+.btn-memo{background:var(--teal);color:white;border:none;padding:10px 22px;border-radius:var(--radius);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;transition:background 0.15s;}
+.btn-memo:hover:not(:disabled){background:var(--teal-dark);}
+.btn-memo:disabled{background:var(--border-strong);color:white;cursor:not-allowed;opacity:0.65;}
 
 /* layout */
 .main-body{display:flex;flex:1;overflow:hidden;}
 
 /* sidebar */
-.sidebar{width:200px;background:var(--surface);border-right:1px solid var(--border);padding:20px 0;flex-shrink:0;}
+.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);padding:24px 0;flex-shrink:0;}
 .sidebar-section{margin-bottom:20px;}
-.sidebar-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-3);padding:0 16px;margin-bottom:6px;font-family:var(--mono);}
-.sidebar-item{display:flex;align-items:center;gap:9px;padding:8px 16px;font-size:13px;color:var(--ink-2);cursor:pointer;border-left:2px solid transparent;transition:background 0.15s,color 0.15s;}
+.sidebar-label{font-size:11px;letter-spacing:0.5px;text-transform:uppercase;color:var(--ink-3);padding:0 20px;margin-bottom:8px;font-weight:600;}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13.5px;color:var(--ink-2);cursor:pointer;border-left:2px solid transparent;transition:background 0.15s,color 0.15s;}
 .sidebar-item:hover{background:var(--surface-2);color:var(--ink);}
-.sidebar-item.active{background:rgba(245,158,11,0.08);color:var(--amber);border-left-color:var(--amber);font-weight:500;}
-.sidebar-icon{font-size:13px;opacity:0.6;}
+.sidebar-item.active{background:var(--teal-soft);color:var(--teal-dark);border-left-color:var(--teal);font-weight:500;}
+.sidebar-icon{font-size:14px;}
 
 /* content */
-.content{flex:1;overflow-y:auto;padding:24px 28px 60px;}
+.content{flex:1;overflow-y:auto;padding:28px 32px 60px;}
 .page{display:none;}.page.active{display:block;}
 
 /* page header */
-.page-header{margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
-.page-header h2{font-family:var(--mono);font-size:17px;font-weight:500;color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
-.page-header p{color:var(--ink-3);font-size:12px;font-family:var(--mono);}
+.page-header{margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.page-header h2{font-size:22px;font-weight:600;color:var(--ink);margin-bottom:5px;letter-spacing:-0.4px;}
+.page-header p{color:var(--ink-2);font-size:13.5px;line-height:1.5;}
 
 /* cards */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:12px;}
-.card-header{padding:12px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.card-title{font-size:11px;font-weight:600;color:var(--ink);letter-spacing:1.5px;text-transform:uppercase;font-family:var(--mono);}
-.card-subtitle{font-size:10.5px;color:var(--ink-3);margin-top:2px;font-family:var(--mono);}
-.card-body{padding:18px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);margin-bottom:14px;overflow:hidden;}
+.card-header{padding:14px 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);}
+.card-title{font-size:13.5px;font-weight:600;color:var(--ink);letter-spacing:-0.1px;}
+.card-subtitle{font-size:11.5px;color:var(--ink-3);margin-top:3px;}
+.card-body{padding:20px;}
 
 /* badges */
-.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;}
-.badge-green{background:var(--green-pale);color:var(--green);}
-.badge-blue{background:var(--blue-pale);color:var(--blue);}
-.badge-amber{background:var(--amber-pale);color:var(--amber);}
-.badge-red{background:var(--red-pale);color:var(--red);}
-.badge-grey{background:var(--grey-pale);color:var(--grey);}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:500;}
+.badge-green{background:var(--green-pale);color:#065f46;}
+.badge-blue{background:var(--blue-pale);color:#1e40af;}
+.badge-teal{background:var(--teal-pale);color:var(--teal-dark);}
+.badge-amber{background:var(--amber-pale);color:#92400e;}
+.badge-red{background:var(--red-pale);color:#991b1b;}
+.badge-grey{background:var(--grey-pale);color:#334155;}
 
 /* ERG grid */
-.erg-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.erg-card{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;}
-.erg-card.dimmed{opacity:0.4;}
-.erg-icon{font-size:18px;margin-bottom:5px;}
-.erg-name{font-size:11px;font-weight:500;color:var(--amber);margin-bottom:3px;letter-spacing:1px;text-transform:uppercase;font-family:var(--mono);}
-.erg-meta{font-size:11px;color:var(--ink-3);margin-bottom:7px;font-family:var(--mono);}
-.erg-notice{font-size:11px;background:rgba(107,114,128,0.1);border:1px solid var(--border);border-radius:2px;padding:6px 8px;line-height:1.5;color:var(--ink-3);font-family:var(--mono);}
-.erg-notice.green{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.3);color:#86efac;}
+.erg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.erg-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;}
+.erg-card.dimmed{opacity:0.5;background:var(--surface-2);}
+.erg-icon{font-size:20px;margin-bottom:6px;}
+.erg-name{font-size:12.5px;font-weight:600;color:var(--teal-dark);margin-bottom:3px;letter-spacing:0.2px;}
+.erg-meta{font-size:11.5px;color:var(--ink-3);margin-bottom:8px;}
+.erg-notice{font-size:11.5px;background:var(--surface-2);border:1px solid var(--border);border-radius:4px;padding:7px 9px;line-height:1.5;color:var(--ink-2);}
+.erg-notice.green{background:var(--green-pale);border-color:#6ee7b7;color:#065f46;}
 
 /* program rows */
 .prog-list{display:flex;flex-direction:column;gap:6px;}
-.prog-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);}
-.prog-row.discontinued{opacity:0.4;}
-.prog-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.prog-row{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);}
+.prog-row.discontinued{opacity:0.5;background:var(--surface-2);}
+.prog-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .prog-name{font-size:14px;font-weight:400;color:var(--ink);flex:1;}
 
 /* notices */
-.notice-box{border-radius:var(--radius);padding:10px 14px;margin-bottom:12px;font-size:12px;line-height:1.6;font-family:var(--mono);border-left-width:3px;border-left-style:solid;}
-.notice-box.warning{background:var(--red-pale);border:1px solid rgba(239,68,68,0.3);border-left:3px solid var(--red);color:#fca5a5;}
-.notice-box.info{background:var(--blue-pale);border:1px solid rgba(59,130,246,0.3);border-left:3px solid var(--blue);color:#93c5fd;}
-.notice-box.success{background:var(--green-pale);border:1px solid rgba(34,197,94,0.3);border-left:3px solid var(--green);color:#86efac;}
-
-/* progress steps */
-.progress-steps{display:flex;align-items:center;margin-bottom:24px;}
-.step{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--ink-3);}
-.step.active{color:var(--blue);font-weight:500;}
-.step.done{color:var(--green);}
-.step-num{width:20px;height:20px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;}
-.step.done .step-num{background:var(--green);border-color:var(--green);color:white;}
-.step.active .step-num{background:var(--blue);border-color:var(--blue);color:white;}
-.step-line{flex:1;height:1px;background:var(--border);margin:0 7px;min-width:16px;}
+.notice-box{border-radius:var(--radius);padding:12px 14px;margin-bottom:14px;font-size:13px;line-height:1.6;border-left-width:3px;border-left-style:solid;}
+.notice-box.warning{background:#fef2f2;border:1px solid #fecaca;border-left:3px solid var(--red);color:#991b1b;}
+.notice-box.info{background:var(--blue-soft);border:1px solid var(--blue-pale);border-left:3px solid var(--blue);color:#1e40af;}
+.notice-box.success{background:var(--teal-soft);border:1px solid var(--teal-pale);border-left:3px solid var(--teal);color:var(--teal-dark);}
 
 /* continue bar */
-.continue-bar{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:24px;padding-top:16px;border-top:1px solid var(--border);}
-.continue-hint{font-size:11.5px;color:var(--ink-3);font-family:var(--mono);}
-.btn-primary{background:var(--amber);color:#000;border:none;padding:9px 22px;border-radius:var(--radius);font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:0.5px;cursor:pointer;transition:background 0.15s,transform 0.1s;text-transform:uppercase;}
-.btn-primary:hover{background:#fbbf24;transform:translateY(-1px);}
-.btn-primary:disabled{background:var(--border);color:var(--ink-3);cursor:not-allowed;transform:none;}
-
-/* banner CSS removed — using modal */
+.continue-bar{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin-top:26px;padding-top:18px;border-top:1px solid var(--border);}
+.continue-hint{font-size:12.5px;color:var(--ink-3);}
+.btn-primary{background:var(--teal);color:white;border:none;padding:10px 24px;border-radius:var(--radius);font-family:var(--sans);font-size:13.5px;font-weight:500;cursor:pointer;transition:background 0.15s,transform 0.1s;}
+.btn-primary:hover:not(:disabled){background:var(--teal-dark);transform:translateY(-1px);}
+.btn-primary:disabled{background:var(--border-strong);color:white;cursor:not-allowed;transform:none;opacity:0.65;}
 
 /* open-ended */
-.open-response-area{width:100%;min-height:110px;border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-family:var(--sans);font-size:14px;color:var(--ink);background:var(--surface-2);resize:vertical;outline:none;transition:border-color 0.15s;line-height:1.7;}
-.open-response-area:focus{border-color:var(--amber);}
-.char-count{font-size:10.5px;color:var(--ink-3);text-align:right;margin-top:4px;font-family:var(--mono);}
-.char-count.ok{color:var(--green);}
+.open-response-area{width:100%;min-height:120px;border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;font-family:var(--sans);font-size:14.5px;color:var(--ink);background:var(--surface);resize:vertical;outline:none;transition:border-color 0.15s,box-shadow 0.15s;line-height:1.65;}
+.open-response-area:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-soft);}
 
-/* ═══════════════════════════════════════
-   PRIORITY PLANNER — 10-point allocation
-   ═══════════════════════════════════════ */
-
-/* sticky budget bar */
-.budget-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px 10px;margin-bottom:16px;box-shadow:var(--shadow);position:sticky;top:48px;z-index:100;}
+/* priority planner */
+.budget-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 18px 12px;margin-bottom:18px;box-shadow:var(--shadow-sm);position:sticky;top:56px;z-index:100;}
 .budget-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;}
-.budget-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-3);font-family:var(--mono);}
-.budget-count{font-size:11px;color:var(--ink-3);font-family:var(--mono);}
-.budget-count strong{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--amber);transition:color 0.2s;}
+.budget-label{font-size:11.5px;letter-spacing:0.3px;text-transform:uppercase;color:var(--ink-3);font-weight:600;}
+.budget-count{font-size:12px;color:var(--ink-3);}
+.budget-count strong{font-size:22px;font-weight:600;color:var(--teal);transition:color 0.2s;}
 .budget-count strong.full{color:var(--green);}
-
-/* pip row */
-.pip-row{display:flex;gap:4px;margin-bottom:7px;}
+.pip-row{display:flex;gap:4px;margin-bottom:8px;}
 .pip{width:22px;height:8px;border-radius:2px;background:var(--border);transition:background 0.12s;}
-.pip.on{background:var(--amber);}
-
-.budget-hint{font-size:11px;color:var(--ink-3);min-height:15px;font-family:var(--mono);}
-.budget-hint.ok{color:var(--green);}
+.pip.on{background:var(--teal);}
+.budget-hint{font-size:12px;color:var(--ink-3);min-height:15px;}
+.budget-hint.ok{color:var(--green);font-weight:500;}
 
 /* activity cards */
-.activity-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;}
-.activity-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px 14px;transition:border-color 0.15s,background 0.15s;}
-.activity-card.on{border-color:rgba(245,158,11,0.5);background:rgba(245,158,11,0.04);}
+.activity-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.activity-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px 14px;transition:border-color 0.15s,background 0.15s;box-shadow:var(--shadow-sm);}
+.activity-card.on{border-color:var(--teal);background:var(--teal-soft);}
 .activity-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px;}
-.activity-text{font-size:16px;line-height:1.65;color:var(--ink);flex:1;font-weight:400;}
+.activity-text{font-size:15.5px;line-height:1.6;color:var(--ink);flex:1;}
 .pts-badge{text-align:right;flex-shrink:0;}
-.pts-num{font-family:var(--mono);font-size:28px;line-height:1;color:var(--border-strong);transition:color 0.15s;font-weight:500;}
-.pts-num.on{color:var(--amber);}
-.pts-unit{font-size:9px;color:var(--ink-3);letter-spacing:1px;text-transform:uppercase;font-family:var(--mono);}
+.pts-num{font-size:28px;line-height:1;color:var(--border-strong);transition:color 0.15s;font-weight:600;}
+.pts-num.on{color:var(--teal);}
+.pts-unit{font-size:10px;color:var(--ink-3);letter-spacing:0.5px;text-transform:uppercase;font-weight:600;margin-top:2px;}
 
 /* stepper */
-.stepper{display:flex;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-.step-btn{width:42px;height:36px;background:none;border:none;font-size:20px;color:var(--ink-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.12s,color 0.12s;flex-shrink:0;user-select:none;line-height:1;}
-.step-btn:hover:not(:disabled){background:var(--surface-2);color:var(--amber);}
-.step-btn:disabled{color:var(--border);cursor:not-allowed;}
-.stepper-track{flex:1;height:36px;position:relative;background:var(--surface-2);overflow:hidden;}
-.stepper-fill{position:absolute;left:0;top:0;bottom:0;background:rgba(245,158,11,0.2);transition:width 0.15s;}
-.stepper-lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--ink-2);user-select:none;font-family:var(--mono);}
+.stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.step-btn{width:42px;height:38px;background:var(--surface-2);border:none;font-size:20px;color:var(--ink-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.12s,color 0.12s;flex-shrink:0;user-select:none;line-height:1;font-weight:500;}
+.step-btn:hover:not(:disabled){background:var(--teal-pale);color:var(--teal-dark);}
+.step-btn:disabled{color:var(--border-strong);cursor:not-allowed;background:var(--surface-2);}
+.stepper-track{flex:1;height:38px;position:relative;background:var(--surface);overflow:hidden;}
+.stepper-fill{position:absolute;left:0;top:0;bottom:0;background:var(--teal-pale);transition:width 0.15s;}
+.stepper-lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:500;color:var(--ink-2);user-select:none;}
 
 /* nudge popup */
-.nudge-overlay{display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px);align-items:center;justify-content:center;padding:24px;}
+.nudge-overlay{display:none;position:fixed;inset:0;z-index:900;background:rgba(15,23,42,0.5);backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:24px;}
 .nudge-overlay.visible{display:flex;}
-.nudge-modal{background:var(--surface);border:1px solid var(--border-strong);border-left:3px solid var(--amber);border-radius:var(--radius);padding:28px 28px 22px;max-width:420px;width:100%;box-shadow:0 16px 40px rgba(0,0,0,0.5);animation:slideModal 0.25s ease;}
-.nudge-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:10px;}
-.nudge-text{font-size:15px;line-height:1.65;color:var(--ink);margin-bottom:20px;}
-.nudge-btn{background:var(--amber);color:#000;border:none;padding:9px 20px;border-radius:var(--radius);font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;}
-.nudge-btn:hover{background:#fbbf24;}
+.nudge-modal{background:var(--surface);border-radius:var(--radius-lg);border-left:4px solid var(--teal);padding:28px 28px 22px;max-width:440px;width:100%;box-shadow:var(--shadow-lg);animation:slideModal 0.25s ease;}
+.nudge-label{font-size:11px;letter-spacing:0.5px;text-transform:uppercase;color:var(--teal-dark);margin-bottom:10px;font-weight:600;}
+.nudge-text{font-size:14.5px;line-height:1.65;color:var(--ink);margin-bottom:20px;}
+.nudge-btn{background:var(--teal);color:white;border:none;padding:10px 22px;border-radius:var(--radius);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;transition:background 0.15s;}
+.nudge-btn:hover{background:var(--teal-dark);}
 
 /* homepage */
-.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-.home-widget{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;cursor:default;}
-.home-widget-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;}
-.home-widget-val{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--ink);line-height:1;}
-.home-widget-sub{font-size:11.5px;color:var(--ink-3);margin-top:4px;}
-.home-announce{background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;}
-.home-announce-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;}
-.home-announce-text{font-size:13.5px;color:var(--ink-2);line-height:1.6;}
-.home-links{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
-.home-link{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:border-color 0.15s,background 0.15s;}
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
+.home-widget{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;box-shadow:var(--shadow-sm);}
+.home-widget-label{font-size:11px;letter-spacing:0.4px;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px;font-weight:600;}
+.home-widget-val{font-size:26px;font-weight:600;color:var(--ink);line-height:1;letter-spacing:-0.5px;}
+.home-widget-sub{font-size:12px;color:var(--ink-3);margin-top:5px;}
+.home-announce{background:var(--blue-soft);border:1px solid var(--blue-pale);border-left:3px solid var(--blue);border-radius:var(--radius-lg);padding:16px 18px;margin-bottom:18px;}
+.home-announce-label{font-size:11px;letter-spacing:0.4px;text-transform:uppercase;color:#1e40af;margin-bottom:6px;font-weight:600;}
+.home-announce-text{font-size:13.5px;color:#1e3a8a;line-height:1.6;}
+.home-links{display:flex;flex-direction:column;gap:7px;margin-bottom:16px;}
+.home-link{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:border-color 0.15s,background 0.15s;box-shadow:var(--shadow-sm);}
 .home-link:hover{border-color:var(--border-strong);background:var(--surface-2);}
-.home-link-name{font-size:13.5px;color:var(--ink);}
-.home-link-arrow{font-size:12px;color:var(--ink-3);}
+.home-link-name{font-size:14px;color:var(--ink);font-weight:500;}
+.home-link-arrow{font-size:14px;color:var(--ink-3);}
+.home-section-label{font-size:11px;letter-spacing:0.4px;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px;font-weight:600;}
 
-.dei-link-row{opacity:0.35;pointer-events:none;cursor:not-allowed;}
-.dei-link-row.unlocked{opacity:1;pointer-events:auto;cursor:pointer;border-color:rgba(245,158,11,0.4);background:rgba(245,158,11,0.04);}
-.dei-link-row.unlocked:hover{border-color:var(--amber);background:rgba(245,158,11,0.1);}
-.dei-link-name{color:var(--amber) !important;font-weight:500;}
-.dei-link-arrow{color:var(--amber) !important;}
+.dei-link-row{opacity:0.4;pointer-events:none;cursor:not-allowed;}
+.dei-link-row.unlocked{opacity:1;pointer-events:auto;cursor:pointer;border-color:var(--teal-pale);background:var(--teal-soft);}
+.dei-link-row.unlocked:hover{border-color:var(--teal);background:var(--teal-pale);}
+.dei-link-name{color:var(--teal-dark) !important;font-weight:600;}
+.dei-link-arrow{color:var(--teal) !important;}
 
 /* manipulation check scale */
-.mc-scale{margin-top:4px;}
-.mc-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-3);font-family:var(--mono);margin-bottom:10px;}
+.mc-scale{margin-top:6px;}
+.mc-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-3);margin-bottom:12px;font-weight:500;}
 .mc-options{display:flex;gap:8px;}
 .mc-opt{flex:1;cursor:pointer;}
 .mc-opt input{display:none;}
-.mc-opt span{display:flex;align-items:center;justify-content:center;height:44px;border:1.5px solid var(--border);border-radius:var(--radius);font-family:var(--mono);font-size:15px;font-weight:500;color:var(--ink-2);transition:all 0.12s;cursor:pointer;}
-.mc-opt input:checked + span{background:var(--amber);border-color:var(--amber);color:#000;}
-.mc-opt:hover span{border-color:var(--amber);color:var(--amber);}
+.mc-opt span{display:flex;align-items:center;justify-content:center;height:46px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:15.5px;font-weight:600;color:var(--ink-2);transition:all 0.12s;cursor:pointer;background:var(--surface);}
+.mc-opt input:checked + span{background:var(--teal);border-color:var(--teal);color:white;}
+.mc-opt:hover span{border-color:var(--teal);color:var(--teal-dark);}
 
 /* portal CTA card */
-.portal-cta-card{background:var(--surface);border:1px solid var(--border-strong);border-left:3px solid var(--amber);border-radius:var(--radius);padding:18px 20px;margin-bottom:18px;box-shadow:var(--shadow-md);}
+.portal-cta-card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--teal);border-radius:var(--radius-lg);padding:18px 22px;margin-bottom:20px;box-shadow:var(--shadow-md);}
 .portal-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;}
-.portal-cta-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:5px;}
+.portal-cta-label{font-size:11px;letter-spacing:0.4px;text-transform:uppercase;color:var(--teal-dark);margin-bottom:5px;font-weight:600;}
 .portal-cta-body{font-size:14px;line-height:1.5;color:var(--ink);}
 
 /* completion */
-.completion-screen{display:none;text-align:center;padding:80px 20px;}
+.completion-screen{display:none;text-align:center;padding:100px 20px;}
 .completion-screen.visible{display:block;}
-.completion-icon{font-size:44px;margin-bottom:16px;color:var(--green);}
-.completion-screen h2{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--amber);margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;}
-.completion-screen p{color:var(--ink-2);font-size:14px;margin-bottom:6px;}
-.redirect-note{font-size:11px;color:var(--ink-3);margin-top:16px;font-family:var(--mono);}
+.completion-icon{width:64px;height:64px;border-radius:50%;background:var(--teal-pale);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px;color:var(--teal-dark);}
+.completion-screen h2{font-size:24px;font-weight:600;color:var(--ink);margin-bottom:10px;letter-spacing:-0.3px;}
+.completion-screen p{color:var(--ink-2);font-size:14.5px;margin-bottom:6px;}
+.redirect-note{font-size:12px;color:var(--ink-3);margin-top:20px;}
 </style>
 </head>
 <body>
 <div class="app" id="app">
 
 <nav class="topnav">
-  <div class="nav-logo">SYNERTECH <span>EMPLOYEE PORTAL</span></div>
+  <div class="nav-logo">
+    <div class="nav-logo-mark">S</div>
+    Synertech
+    <span class="nav-logo-sub">Employee Portal</span>
+  </div>
 </nav>
 
 <div id="portalUpdateBar" class="portal-update-bar">
-  <span>▲</span> <strong>PORTAL UPDATED</strong> — Reflecting organizational changes from the Executive Leadership Team.
+  <span>▲</span> <strong>Portal updated</strong> — Reflecting organizational changes from the Executive Leadership Team.
 </div>
 
-<div class="memo-overlay" id="memoOverlay"><div class="memo-modal"><div class="memo-top-bar" id="memoTopBar"></div><div class="memo-scroll-body" id="memoScrollBody"></div><div class="scroll-nudge" id="scrollNudge">↓ scroll to read</div><div class="memo-footer"><div class="memo-countdown" id="memoCountdown"><strong id="countdownNum">20</strong></div><button class="btn-memo" id="memoContinueBtn" disabled onclick="dismissMemo()">I have read this announcement →</button></div></div></div>
+<!-- Welcome modal -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <div class="welcome-modal">
+    <div class="welcome-icon">👋</div>
+    <div class="welcome-title">Welcome to the Synertech Employee Portal</div>
+    <div class="welcome-body">Please take a moment to explore the portal.</div>
+    <button class="btn-welcome" id="welcomeBtn" disabled onclick="dismissWelcome()">Got it</button>
+  </div>
+</div>
+
+<!-- Announcement modal -->
+<div class="memo-overlay" id="memoOverlay">
+  <div class="memo-modal">
+    <div class="memo-top-bar" id="memoTopBar"></div>
+    <div class="memo-scroll-body" id="memoScrollBody"></div>
+    <div class="scroll-nudge" id="scrollNudge">↓ scroll to read</div>
+    <div class="memo-footer">
+      <div class="memo-countdown" id="memoCountdown"><strong id="countdownNum">20</strong></div>
+      <button class="btn-memo" id="memoContinueBtn" disabled onclick="dismissMemo()">I have read this announcement →</button>
+    </div>
+  </div>
+</div>
 
 <div class="main-body">
   <aside class="sidebar">
     <div class="sidebar-section">
       <div class="sidebar-label">My Portal</div>
-      <div class="sidebar-item" id="nav-openended" style="display:none;color:#2563eb;font-weight:500;" onclick="showPage('openended')"><span class="sidebar-icon">💬</span> Your Reaction</div>
+      <div class="sidebar-item" id="nav-openended" style="display:none;" onclick="showPage('openended')"><span class="sidebar-icon">💬</span> Your Reaction</div>
       <div class="sidebar-item" id="nav-mc" style="display:none;" hidden></div>
       <div class="sidebar-item" id="nav-instructions" style="display:none;" hidden></div>
       <div class="sidebar-item" id="nav-planner" style="display:none;" onclick="showPage('planner')" hidden></div>
@@ -271,15 +319,13 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
 
   <main class="content" id="contentArea">
 
-    <!-- ══════════════ HOMEPAGE ══════════════ -->
-
+    <!-- HOMEPAGE -->
     <div class="page active" id="page-home">
       <div class="page-header">
         <h2>Synertech Employee Portal</h2>
         <p>Welcome to the Synertech Employee Portal. Review the portal to learn more about the company.</p>
       </div>
 
-      <!-- Quick stats -->
       <div class="home-grid">
         <div class="home-widget">
           <div class="home-widget-label">PTO Balance</div>
@@ -293,25 +339,21 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
         </div>
       </div>
 
-      <!-- Announcements -->
       <div class="home-announce">
         <div class="home-announce-label">Company News</div>
         <div class="home-announce-text">Q1 earnings call recap now available in the Investor Relations section. Synertech reported 8.4% YoY revenue growth driven by enterprise SaaS expansion.</div>
       </div>
 
-      <!-- Portal links -->
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px;">Portal Sections</div>
+      <div class="home-section-label">Portal Sections</div>
       <div class="home-links">
         <div class="home-link" onclick="showHome('learning')"><span class="home-link-name">📚 &nbsp;Learning &amp; Development</span><span class="home-link-arrow">→</span></div>
         <div class="home-link" onclick="showHome('it')"><span class="home-link-name">🖥 &nbsp;IT &amp; Equipment</span><span class="home-link-arrow">→</span></div>
         <div class="home-link" onclick="showHome('policies')"><span class="home-link-name">📋 &nbsp;Policies &amp; Handbook</span><span class="home-link-arrow">→</span></div>
         <div class="home-link dei-link-row" id="deiLinkRow" onclick="enterDEI()"><span class="home-link-name dei-link-name">◈ &nbsp;Diversity, Equity &amp; Inclusion</span><span class="home-link-arrow dei-link-arrow">→</span></div>
       </div>
-
-
     </div>
 
-    <!-- Stub pages for home navigation -->
+    <!-- Stub pages -->
     <div class="page" id="page-learning">
       <div class="page-header"><h2>Learning &amp; Development</h2><p>Courses, certifications, and growth resources</p></div>
       <div class="card"><div class="card-body">
@@ -323,6 +365,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
       </div></div>
       <div class="continue-bar"><button class="btn-primary" onclick="showPage('home');">← Back to Dashboard</button></div>
     </div>
+
     <div class="page" id="page-it">
       <div class="page-header"><h2>IT &amp; Equipment</h2><p>Hardware requests, software access, and support tickets</p></div>
       <div class="card"><div class="card-body">
@@ -334,6 +377,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
       </div></div>
       <div class="continue-bar"><button class="btn-primary" onclick="showPage('home');">← Back to Dashboard</button></div>
     </div>
+
     <div class="page" id="page-policies">
       <div class="page-header"><h2>Policies &amp; Handbook</h2><p>Company policies, code of conduct, and employee handbook</p></div>
       <div class="card"><div class="card-body">
@@ -347,9 +391,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
       <div class="continue-bar"><button class="btn-primary" onclick="showPage('home');">← Back to Dashboard</button></div>
     </div>
 
-    <!-- ══════════════ PRE-ANNOUNCEMENT PORTAL ══════════════ -->
-
-    <!-- Inclusion & Belonging -->
+    <!-- Pre-announcement DEI -->
     <div class="page" id="page-dei">
       <div class="page-header">
         <h2>Inclusion &amp; Belonging</h2>
@@ -362,7 +404,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
           <span class="badge badge-green">Active</span>
         </div>
         <div class="card-body" id="dei-card-body">
-          <p style="font-size:13.5px;line-height:1.75;color:var(--ink-2);">Synertech's DEI work is coordinated by the Office of Inclusion, which partners with HR and senior leadership to set goals, track progress, and resource programs across the company. Our initiatives span recruiting, promotion, leadership development, and day-to-day workplace culture.</p>
+          <p style="font-size:14px;line-height:1.7;color:var(--ink-2);">Synertech's DEI work is coordinated by the Office of Inclusion, which partners with HR and senior leadership to set goals, track progress, and resource programs across the company. Our initiatives span recruiting, promotion, leadership development, and day-to-day workplace culture.</p>
         </div>
       </div>
 
@@ -371,16 +413,15 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
       </div>
     </div>
 
-    <!-- ══════════════ OPEN-ENDED ══════════════ -->
-
+    <!-- Open-ended reaction -->
     <div class="page" id="page-openended">
       <div class="page-header">
         <h2>Your Reaction</h2>
-        <p>Before completing the priority planner, share your initial thoughts.</p>
+        <p>Please share your initial thoughts.</p>
       </div>
 
       <div class="card"><div class="card-body">
-        <p style="font-size:15px;line-height:1.65;color:var(--ink);margin-bottom:14px;">How do you personally view Synertech's strategy? What do you think this means for DEI initiatives at Synertech?</p>
+        <p style="font-size:15.5px;line-height:1.6;color:var(--ink);margin-bottom:14px;">How do you personally view Synertech's strategy? What do you think this means for DEI initiatives at Synertech?</p>
         <textarea class="open-response-area" id="openResponseText" placeholder="Share your thoughts here..."></textarea>
       </div></div>
 
@@ -389,16 +430,15 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
       </div>
     </div>
 
-    <!-- ══════════════ MANIPULATION CHECK ══════════════ -->
-
+    <!-- Manipulation check -->
     <div class="page" id="page-mc">
       <div class="page-header">
         <h2>Quick Question</h2>
-        <p>Please respond to the following statement before continuing.</p>
+        <p>Please indicate the extent to which you agree or disagree with the following statement.</p>
       </div>
       <div class="card">
         <div class="card-body">
-          <p style="font-size:16px;line-height:1.7;color:var(--ink);margin-bottom:22px;">"Synertech is making substantive changes to its operation, rather than just adjusting its language."</p>
+          <p style="font-size:16px;line-height:1.65;color:var(--ink);margin-bottom:24px;font-weight:500;">Synertech is making substantive changes to its operation, rather than just adjusting its language.</p>
           <div class="mc-scale">
             <div class="mc-labels">
               <span>Strongly disagree</span>
@@ -422,8 +462,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
       </div>
     </div>
 
-    <!-- ══════════════ PLANNER INSTRUCTIONS ══════════════ -->
-
+    <!-- Planner instructions -->
     <div class="page" id="page-instructions">
       <div class="page-header">
         <h2>Priority Planner</h2>
@@ -431,24 +470,22 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
       </div>
       <div class="card">
         <div class="card-body" style="font-size:15px;line-height:1.75;color:var(--ink);">
-          <p style="margin-bottom:14px;">On the next page, you will see a list of activities. You have <strong style="color:var(--amber);">10 points</strong> to distribute across these activities. Each point represents a share of your attention and energy over the coming month in response to the announcement you just read.</p>
+          <p style="margin-bottom:14px;">On the next page, you will see a list of activities. You have <strong style="color:var(--teal-dark);">10 points</strong> to distribute across these activities. Each point represents a share of your attention and energy over the coming month in response to the announcement you just read.</p>
           <p>Allocate <strong>more points</strong> to activities you would actually prioritize, and <strong>fewer points</strong> (or zero) to activities you would not. Your points must add up to exactly 10.</p>
         </div>
       </div>
       <div class="continue-bar">
-        <button class="btn-primary" onclick="advanceToPlanner()">Begin →</button>
+        <button class="btn-primary" id="beginPlannerBtn" disabled onclick="advanceToPlanner()">Begin →</button>
       </div>
     </div>
 
-    <!-- ══════════════ PRIORITY PLANNER ══════════════ -->
-
+    <!-- Priority planner -->
     <div class="page" id="page-planner">
       <div class="page-header">
         <h2>Priority Planner</h2>
         <p>You have <strong>10 points</strong> to distribute across the activities below. Think of each point as representing a portion of your attention and energy over the coming month. Allocate more points to activities you would actually prioritize. You can assign 0 to any item. Points must add up to exactly 10.</p>
       </div>
 
-      <!-- Sticky budget -->
       <div class="budget-bar">
         <div class="budget-top">
           <span class="budget-label">Points remaining</span>
@@ -488,7 +525,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
 
 <script>
 // ── Config ──────────────────────────────────────────
-const QUALTRICS_RETURN_URL = "https://columbia.qualtrics.com/jfe/form/SV_88lQQha6Y1Z6ho2"; // ← REPLACE
+const QUALTRICS_RETURN_URL = "https://columbia.qualtrics.com/jfe/form/SV_88lQQha6Y1Z6ho2";
 const TOTAL   = 10;
 const N_PIPS  = 10;
 const urlParams = new URLSearchParams(window.location.search);
@@ -497,8 +534,8 @@ const PID = urlParams.get("PROLIFIC_PID") || urlParams.get("pid") || "";
 
 // ── Actions — shuffled on load ───────────────────────
 const ACTIONS_BASE = [
-  { id:"preserve_erg",      bucket:"preserve",  text:"Attend an upcoming ERG event or affinity group workshop at Synertech." },
-  { id:"monitor_track",     bucket:"monitor",   text:"Track whether specific programs (e.g., the Sponsorship Program, Equity in Hiring workshops) continue operating in practice." },
+  { id:"preserve_erg",      bucket:"preserve",  text:"Attend an upcoming employee affinity group meeting or event." },
+  { id:"monitor_track",     bucket:"monitor",   text:"Track whether specific DEI-related programs continue operating in practice." },
   { id:"monitor_manager",   bucket:"monitor",   text:"Ask your manager directly what will actually change following the announcement." },
   { id:"challenge_manager", bucket:"challenge", text:"Raise concerns about the announcement directly with your manager or in a team meeting." },
   { id:"withdraw_exit",     bucket:"withdraw",  text:"Update your resume and explore job opportunities at other organizations." },
@@ -513,13 +550,13 @@ ACTIONS.forEach(a => values[a.id] = 0);
 // ── Announcement messages ────────────────────────────
 const MESSAGES = {
   high:{
-    cls:"banner-high", icon:"⚠", label:"IMPORTANT COMPANY ANNOUNCEMENT",
+    cls:"banner-high", icon:"⚠", label:"Important Company Announcement",
     from:"Executive Leadership Team",
     title:"The Evolution of Our Cultural Strategy",
     body:`<p>We remain focused on driving our business by creating a sense of belonging for our team, guests and communities through a commitment to inclusion. Belonging for all is an essential part of our team and culture, helping fuel consumer relevance and business results.</p>
 <p>In every area of our business, we are constantly listening, learning and adjusting to set ourselves up for long-term success. As we start a new fiscal year, we're continuing to shape our next chapter at Synertech. These updates streamline our public-facing initiatives and ensures our core organizational goals and accountability structures remain intact.</p>
 <p>Throughout this year, we'll be accelerating action in key areas and implementing changes with the goal of driving growth and staying in step with the evolving external landscape. We will continue to monitor and adjust as needed.</p><p>Current actions include:</p>
-<ul style="margin:0 0 12px 20px;line-height:1.8;">
+<ul>
   <li>Concluding our three-year "Diversity, Equity, and Inclusion" action plan and discontinuing its associated budget allocations, reporting structures, and performance targets.</li>
   <li>Ending our Racial Equity Action and Change (REACH) initiative, including the retirement of its operational milestones, benchmarking systems, and dedicated staffing.</li>
   <li>Eliminating demographic-based employee resource groups and reallocating associated funding toward general professional development programs open to all employees.</li>
@@ -528,13 +565,13 @@ const MESSAGES = {
 <p>Managers will receive guidance from HR on communicating these changes to their teams.</p>`
   },
   low:{
-    cls:"banner-low", icon:"📢", label:"MESSAGE FROM LEADERSHIP",
+    cls:"banner-low", icon:"📢", label:"Message from Leadership",
     from:"Executive Leadership Team",
     title:"The Evolution of Our Cultural Strategy",
     body:`<p>We remain focused on driving our business by creating a sense of belonging for our team, guests and communities through a commitment to inclusion. Belonging for all is an essential part of our team and culture, helping fuel consumer relevance and business results.</p>
 <p>In every area of our business, we are constantly listening, learning and adjusting to set ourselves up for long-term success. As we start a new fiscal year, we're continuing to shape our next chapter at Synertech. These updates streamline our public-facing initiatives and ensures our core organizational goals and accountability structures remain intact.</p>
 <p>Throughout this year, we'll be accelerating action in key areas and implementing changes with the goal of driving growth and staying in step with the evolving external landscape. We will continue to monitor and adjust as needed.</p><p>Current actions include:</p>
-<ul style="margin:0 0 12px 20px;line-height:1.8;">
+<ul>
   <li>Evolving our three-year "Diversity, Equity, and Inclusion" action plan to a "Belonging at Synertech" action plan, ensuring the continuity of the scope, budget, accountability structures, and performance goals.</li>
   <li>Renaming our "Racial Equity Action and Change" initiative to "Radical Engagement for Action and Change" (REACH), while maintaining our established operational milestones and performance benchmarks.</li>
   <li>Integrating demographic-based employee resource groups into a central inclusive development and mentorship model, with continued budget support and sponsorship from leadership.</li>
@@ -548,13 +585,13 @@ const MESSAGES = {
 const POST = {
   high:{
     deiHeader:`<div><div class="card-title">Belonging at Synertech</div><div class="card-subtitle">Updated following CEO announcement</div></div>`,
-    deiBody:`<div class="notice-box warning">The Office of Inclusion has been dissolved. HR Business Partners will absorb relevant responsibilities.</div><p style="font-size:13.5px;line-height:1.75;color:var(--ink-2);">Synertech is transitioning away from formal DEI programming. Further details on how workplace culture initiatives will be structured going forward will be communicated by HR.</p>`,
+    deiBody:`<div class="notice-box warning">The Office of Inclusion has been dissolved. HR Business Partners will absorb relevant responsibilities.</div><p style="font-size:14px;line-height:1.7;color:var(--ink-2);">Synertech is transitioning away from formal DEI programming. Further details on how workplace culture initiatives will be structured going forward will be communicated by HR.</p>`,
     programs:`<div class="notice-box warning">The following programs have been discontinued. Employees currently enrolled will be contacted by HR.</div>
 <div class="prog-list">
-  <div class="prog-row discontinued"><div class="prog-dot" style="background:#9ca3af"></div><div class="prog-name">Inclusive Leadership Certification</div><span class="badge badge-red">Discontinued</span></div>
-  <div class="prog-row discontinued"><div class="prog-dot" style="background:#9ca3af"></div><div class="prog-name">Sponsorship Program</div><span class="badge badge-red">Discontinued</span></div>
-  <div class="prog-row discontinued"><div class="prog-dot" style="background:#9ca3af"></div><div class="prog-name">Equity in Hiring Workshop</div><span class="badge badge-red">Discontinued</span></div>
-  <div class="prog-row discontinued"><div class="prog-dot" style="background:#9ca3af"></div><div class="prog-name">Allyship in Action</div><span class="badge badge-grey">Under review</span></div>
+  <div class="prog-row discontinued"><div class="prog-dot" style="background:#94a3b8"></div><div class="prog-name">Inclusive Leadership Certification</div><span class="badge badge-red">Discontinued</span></div>
+  <div class="prog-row discontinued"><div class="prog-dot" style="background:#94a3b8"></div><div class="prog-name">Sponsorship Program</div><span class="badge badge-red">Discontinued</span></div>
+  <div class="prog-row discontinued"><div class="prog-dot" style="background:#94a3b8"></div><div class="prog-name">Equity in Hiring Workshop</div><span class="badge badge-red">Discontinued</span></div>
+  <div class="prog-row discontinued"><div class="prog-dot" style="background:#94a3b8"></div><div class="prog-name">Allyship in Action</div><span class="badge badge-grey">Under review</span></div>
 </div>`,
     erg:`<div class="notice-box warning">Company funding and formal HR support for all ERGs have been discontinued. Executive sponsorships have ended. Groups may continue as voluntary social organizations.</div>
 <div class="erg-grid">
@@ -566,20 +603,20 @@ const POST = {
 <div class="card" style="margin-top:12px;">
   <div class="card-header"><div class="card-title">Upcoming Events</div></div>
   <div class="card-body"><div class="prog-list">
-    <div class="prog-row" style="opacity:0.65"><div class="prog-dot" style="background:#9ca3af"></div><div class="prog-name">MOSAIC Heritage Month Kickoff</div><span class="badge badge-grey">Unconfirmed</span></div>
-    <div class="prog-row" style="opacity:0.65"><div class="prog-dot" style="background:#9ca3af"></div><div class="prog-name">Women Forward: Negotiation Workshop</div><span class="badge badge-grey">Unconfirmed</span></div>
-    <div class="prog-row" style="opacity:0.65"><div class="prog-dot" style="background:#9ca3af"></div><div class="prog-name">SPECTRUM Pride Planning Meeting</div><span class="badge badge-grey">Unconfirmed</span></div>
+    <div class="prog-row" style="opacity:0.6"><div class="prog-dot" style="background:#94a3b8"></div><div class="prog-name">MOSAIC Heritage Month Kickoff</div><span class="badge badge-grey">Unconfirmed</span></div>
+    <div class="prog-row" style="opacity:0.6"><div class="prog-dot" style="background:#94a3b8"></div><div class="prog-name">Women Forward: Negotiation Workshop</div><span class="badge badge-grey">Unconfirmed</span></div>
+    <div class="prog-row" style="opacity:0.6"><div class="prog-dot" style="background:#94a3b8"></div><div class="prog-name">SPECTRUM Pride Planning Meeting</div><span class="badge badge-grey">Unconfirmed</span></div>
   </div></div>
 </div>`
   },
   low:{
     deiHeader:`<div><div class="card-title">Culture &amp; Belonging</div><div class="card-subtitle">People &amp; Culture · Updated Q2 2025</div></div>`,
-    deiBody:`<p style="font-size:13.5px;line-height:1.75;color:var(--ink-2);">Synertech is evolving how we talk about our workplace culture initiatives. Our focus on building an environment where every employee can contribute and grow remains central to our people strategy, now framed through our Belonging at Synertech action plan.</p>`,
+    deiBody:`<p style="font-size:14px;line-height:1.7;color:var(--ink-2);">Synertech is evolving how we talk about our workplace culture initiatives. Our focus on building an environment where every employee can contribute and grow remains central to our people strategy, now framed through our Belonging at Synertech action plan.</p>`,
     programs:`<div class="prog-list">
-  <div class="prog-row"><div class="prog-dot" style="background:#2563eb"></div><div class="prog-name">Leadership Excellence Certification</div><span class="badge badge-blue">Required — Managers</span></div>
-  <div class="prog-row"><div class="prog-dot" style="background:#16a34a"></div><div class="prog-name">Talent Sponsorship Program</div><span class="badge badge-green">Active cohort · 48 participants</span></div>
-  <div class="prog-row"><div class="prog-dot" style="background:#d97706"></div><div class="prog-name">Inclusive Hiring Practices Workshop</div><span class="badge badge-amber">Next session: May 15</span></div>
-  <div class="prog-row"><div class="prog-dot" style="background:#7c3aed"></div><div class="prog-name">Allyship in Action</div><span class="badge badge-blue">Open enrollment</span></div>
+  <div class="prog-row"><div class="prog-dot" style="background:var(--blue)"></div><div class="prog-name">Leadership Excellence Certification</div><span class="badge badge-blue">Required — Managers</span></div>
+  <div class="prog-row"><div class="prog-dot" style="background:var(--green)"></div><div class="prog-name">Talent Sponsorship Program</div><span class="badge badge-green">Active cohort · 48 participants</span></div>
+  <div class="prog-row"><div class="prog-dot" style="background:var(--amber)"></div><div class="prog-name">Inclusive Hiring Practices Workshop</div><span class="badge badge-amber">Next session: May 15</span></div>
+  <div class="prog-row"><div class="prog-dot" style="background:var(--teal)"></div><div class="prog-name">Allyship in Action</div><span class="badge badge-teal">Open enrollment</span></div>
 </div>`,
     erg:`<div class="erg-grid">
   <div class="erg-card"><div class="erg-icon">🌐</div><div class="erg-name">MOSAIC</div><div class="erg-meta">340 members · 12 events/yr · Exec sponsor: V. Okafor</div></div>
@@ -590,36 +627,42 @@ const POST = {
 <div class="card" style="margin-top:12px;">
   <div class="card-header"><div class="card-title">Upcoming Events</div></div>
   <div class="card-body"><div class="prog-list">
-    <div class="prog-row"><div class="prog-dot" style="background:#2563eb"></div><div class="prog-name">MOSAIC Heritage Month Kickoff</div><span style="font-size:12px;color:var(--ink-3)">May 1</span></div>
-    <div class="prog-row"><div class="prog-dot" style="background:#16a34a"></div><div class="prog-name">Women Forward: Negotiation Workshop</div><span style="font-size:12px;color:var(--ink-3)">May 7</span></div>
-    <div class="prog-row"><div class="prog-dot" style="background:#ec4899"></div><div class="prog-name">SPECTRUM Pride Planning Meeting</div><span style="font-size:12px;color:var(--ink-3)">May 10</span></div>
+    <div class="prog-row"><div class="prog-dot" style="background:var(--blue)"></div><div class="prog-name">MOSAIC Heritage Month Kickoff</div><span style="font-size:12.5px;color:var(--ink-3)">May 1</span></div>
+    <div class="prog-row"><div class="prog-dot" style="background:var(--green)"></div><div class="prog-name">Women Forward: Negotiation Workshop</div><span style="font-size:12.5px;color:var(--ink-3)">May 7</span></div>
+    <div class="prog-row"><div class="prog-dot" style="background:#ec4899"></div><div class="prog-name">SPECTRUM Pride Planning Meeting</div><span style="font-size:12.5px;color:var(--ink-3)">May 10</span></div>
   </div></div>
 </div>`
   }
 };
 
-// ── Homepage navigation helper ───────────────────────
-function showHome(section){
-  showPage(section);
+// ── Welcome modal ───────────────────────────────────
+const WELCOME_SECONDS = 4;
+function showWelcome(){
+  document.getElementById("welcomeOverlay").classList.add("visible");
+  setTimeout(()=>{
+    document.getElementById("welcomeBtn").disabled = false;
+  }, WELCOME_SECONDS * 1000);
+}
+function dismissWelcome(){
+  document.getElementById("welcomeOverlay").classList.remove("visible");
+  // Now start the homepage exploration timer
+  startHomeTimer();
 }
 
-// ── Enter DEI (begins experiment) ────────────────────
-function enterDEI(){
-  showPage('dei');
-}
+// ── Homepage navigation ──────────────────────────────
+function showHome(section){ showPage(section); }
+function enterDEI(){ showPage('dei'); }
 
-// ── Homepage 30-second timer ──────────────────────────
+// ── Homepage timer ──────────────────────────────────
 let homeTimerStarted = false;
 function startHomeTimer(){
   if(homeTimerStarted) return;
   homeTimerStarted = true;
-  const UNLOCK_AT = 30;
+  const UNLOCK_AT = 20;
   const NUDGE_AT  = 90;
-  // Unlock DEI link at 30s
   setTimeout(()=>{
     document.getElementById('deiLinkRow').classList.add('unlocked');
   }, UNLOCK_AT * 1000);
-  // Show nudge if still on home at 90s
   setTimeout(()=>{
     const currentPage = document.querySelector('.page.active');
     if(currentPage && currentPage.id === 'page-home'){
@@ -643,8 +686,7 @@ function showPage(id){
   document.getElementById("contentArea").scrollTop=0;
 }
 
-// ── Phase 1 → 2 ──────────────────────────────────────
-// ── Memo modal state ────────────────────────────────────
+// ── Announcement modal state ─────────────────────────
 let memoTimerDone  = false;
 let memoScrollDone = false;
 const MEMO_SECONDS = 20;
@@ -654,32 +696,31 @@ function advanceToAnnouncement(){
   const today = new Date();
   const dateStr = today.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
 
-  // Populate modal
   const topBar = document.getElementById("memoTopBar");
   topBar.className = "memo-top-bar " + (CONDITION==="high" ? "high" : "low");
   topBar.innerHTML = `<span>${msg.icon}</span> ${msg.label}`;
 
   document.getElementById("memoScrollBody").innerHTML = `
     <div class="memo-letterhead">
-      <div><div class="memo-org">Synertech</div><div class="memo-org-sub">Cultural Strategy · All Employees</div></div>
+      <div>
+        <div class="memo-org"><div class="memo-org-mark">S</div>Synertech</div>
+        <div class="memo-org-sub">Cultural Strategy · All Employees</div>
+      </div>
       <div class="memo-date">${dateStr}</div>
     </div>
     <div class="memo-fields">
-      <div class="memo-field"><span class="memo-field-label">FROM:</span><span class="memo-field-value">${msg.from}</span></div>
-      <div class="memo-field"><span class="memo-field-label">TO:</span><span class="memo-field-value">All Synertech Employees</span></div>
+      <div class="memo-field"><span class="memo-field-label">From</span><span class="memo-field-value">${msg.from}</span></div>
+      <div class="memo-field"><span class="memo-field-label">To</span><span class="memo-field-value">All Synertech Employees</span></div>
     </div>
     <div class="memo-subject">${msg.title}</div>
     <div class="memo-body">${msg.body}</div>`;
 
-  // Show overlay
   document.getElementById("memoOverlay").classList.add("visible");
 
-  // Scroll-to-bottom listener
   const scrollEl = document.getElementById("memoScrollBody");
   scrollEl.addEventListener("scroll", checkMemoScroll, {passive:true});
-  checkMemoScroll(); // check in case memo fits without scrolling
+  checkMemoScroll();
 
-  // Countdown timer
   let remaining = MEMO_SECONDS;
   const countEl = document.getElementById("countdownNum");
   const ctrEl   = document.getElementById("memoCountdown");
@@ -713,22 +754,16 @@ function tryUnlockMemo(){
 }
 
 function dismissMemo(){
-  // Hide modal
   document.getElementById("memoOverlay").classList.remove("visible");
 
-  // Portal update bar (high only)
   if(CONDITION==="high") document.getElementById("portalUpdateBar").style.display="flex";
 
-  // Update portal pages in place
   const p = POST[CONDITION];
   document.getElementById("dei-card-header").innerHTML = p.deiHeader;
   document.getElementById("dei-card-body").innerHTML   = p.deiBody;
 
-
-  // Reveal reaction nav
   document.getElementById("nav-openended").style.display = "flex";
 
-  // Return to DEI with next-step prompt
   showPage("dei");
   const deiPage = document.getElementById("page-dei");
   if(!deiPage.querySelector(".portal-prompt")){
@@ -748,15 +783,13 @@ function dismissMemo(){
   document.getElementById("dei-continue-bar").style.display = "none";
 }
 
-// ── Open-ended (no minimum required) ─────────────────
-
-// ── Advance to manipulation check ───────────────────────
+// ── Advance to manipulation check ────────────────────
 function advanceToMC(){
   document.getElementById("nav-mc").style.display = "flex";
   showPage("mc");
 }
 
-// ── Manipulation check radio handling ────────────────────
+// ── MC radio handling ────────────────────────────────
 document.addEventListener("change", function(e){
   if(e.target.name === "mc_align"){
     document.getElementById("mcBtn").disabled = false;
@@ -765,13 +798,20 @@ document.addEventListener("change", function(e){
   }
 });
 
-// ── Advance to instructions interstitial ─────────────
+// ── Advance to instructions ──────────────────────────
+const INSTRUCTIONS_WAIT_SECONDS = 5;
 function advanceToInstructions(){
   document.getElementById("nav-instructions").style.display = "flex";
   showPage("instructions");
+  // Disable Begin button for 5 seconds (silently)
+  const beginBtn = document.getElementById("beginPlannerBtn");
+  beginBtn.disabled = true;
+  setTimeout(()=>{
+    beginBtn.disabled = false;
+  }, INSTRUCTIONS_WAIT_SECONDS * 1000);
 }
 
-// ── Advance to planner from instructions ─────────────
+// ── Advance to planner ───────────────────────────────
 function advanceToPlanner(){
   document.getElementById("nav-planner").style.display = "flex";
   buildPlanner();
@@ -784,7 +824,6 @@ function buildPlanner(){
   if(plannerBuilt) return;
   plannerBuilt = true;
 
-  // Pips
   const pipRow = document.getElementById("pipRow");
   for(let i=0;i<N_PIPS;i++){
     const pip = document.createElement("div");
@@ -793,7 +832,6 @@ function buildPlanner(){
     pipRow.appendChild(pip);
   }
 
-  // Activity cards
   const grid = document.getElementById("activityGrid");
   ACTIONS.forEach(a=>{
     const card = document.createElement("div");
@@ -851,12 +889,10 @@ function refreshBudget(){
   const total = getTotal();
   const rem   = TOTAL - total;
 
-  // Pips
   for(let i=0;i<N_PIPS;i++){
     document.getElementById("pip_"+i).className = "pip"+(i<total?" on":"");
   }
 
-  // Count display
   const remEl = document.getElementById("budgetRem");
   remEl.textContent = rem;
   remEl.className = rem===0 ? "full" : "";
@@ -881,15 +917,12 @@ function refreshBudget(){
 }
 
 // ── Submit ───────────────────────────────────────────
-// ← REPLACE with your deployed Apps Script URL
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx2on-aM9NElEhM4lJadiXIx760tEQlzh4fGt5KBw4RBpZydPMEKD2Q5YgvVT85PDuE/exec";
-// ← REPLACE with your Qualtrics Part 2 survey URL
 const QUALTRICS_PART2_URL = "https://columbia.qualtrics.com/jfe/form/SV_9SmPaFoKrFRddfU";
 
 function handleSubmit(){
   if(getTotal()!==TOTAL) return;
 
-  // Build data payload
   const openText = (document.getElementById("openResponseText")||{}).value||"";
   const mcVal = document.querySelector('input[name="mc_align"]:checked');
 
@@ -901,11 +934,9 @@ function handleSubmit(){
   ACTIONS.forEach(a=>{ data[a.id]=values[a.id]; data[a.id+"_bucket"]=a.bucket; });
   Object.entries(buckets).forEach(([b,v])=>{ data["total_"+b]=v; });
 
-  // Show completion screen immediately
   document.getElementById("app").style.display = "none";
   document.getElementById("completionScreen").classList.add("visible");
 
-  // POST to Google Apps Script (no-cors so we fire-and-forget)
   fetch(APPS_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
@@ -913,7 +944,6 @@ function handleSubmit(){
     body: JSON.stringify(data)
   }).catch(()=>{});
 
-  // Redirect to Qualtrics Part 2 after short delay, passing PID
   setTimeout(()=>{
     document.getElementById("redirectNote").textContent = "Redirecting now...";
     window.location.href = QUALTRICS_PART2_URL +
@@ -921,8 +951,11 @@ function handleSubmit(){
       "&condition=" + encodeURIComponent(CONDITION);
   }, 1800);
 }
-// Start homepage timer on load
-startHomeTimer();
+
+// ── Kickoff ──────────────────────────────────────────
+// Show welcome modal on load; the 30s/90s home timers start
+// only AFTER the welcome is dismissed.
+showWelcome();
 </script>
 </body>
 </html>
