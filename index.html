@@ -186,8 +186,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
 .budget-count{font-size:12px;color:var(--ink-3);}
 .budget-count strong{font-size:22px;font-weight:600;color:var(--teal);transition:color 0.2s;}
 .budget-count strong.full{color:var(--green);}
-.pip-row{display:flex;gap:4px;margin-bottom:8px;}
-.pip{width:22px;height:8px;border-radius:2px;background:var(--border);transition:background 0.12s;}
+.pip-row{display:flex;gap:3px;margin-bottom:8px;}
+.pip{flex:1;min-width:0;height:8px;border-radius:2px;background:var(--border);transition:background 0.12s;}
 .pip.on{background:var(--teal);}
 .budget-hint{font-size:12px;color:var(--ink-3);min-height:15px;}
 .budget-hint.ok{color:var(--green);font-weight:500;}
@@ -472,8 +472,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
       </div>
       <div class="card">
         <div class="card-body" style="font-size:15px;line-height:1.75;color:var(--ink);">
-          <p style="margin-bottom:14px;">On the next page, you will see a list of activities. You have <strong style="color:var(--teal-dark);">10 points</strong> to distribute across these activities. Each point represents a share of your attention and energy over the coming month in response to the announcement you just read.</p>
-          <p>Allocate <strong>more points</strong> to activities you would actually prioritize, and <strong>fewer points</strong> (or zero) to activities you would not. Your points must add up to exactly 10.</p>
+          <p style="margin-bottom:14px;">On the next page, you will see a list of activities. You have <strong style="color:var(--teal-dark);">15 points</strong> to distribute across these activities. Each point represents roughly 2 hours of your time and effort over the coming month. So, 15 points reflects about 30 hours that you could devote to these activities over the next month.</p>
+          <p style="margin-bottom:14px;">Allocate <strong>more points</strong> to activities you would prioritize, and <strong>fewer points</strong> (or zero) to activities you would not. Your points must add up to exactly 15.</p>
+          <p>Note that after allocating your points, you will be asked to briefly explain your reasoning for the activities you prioritized. Please allocate points only to activities you would genuinely prioritize, since you may be asked to describe how you would actually carry them out.</p>
         </div>
       </div>
       <div class="continue-bar">
@@ -485,23 +486,58 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
     <div class="page" id="page-planner">
       <div class="page-header">
         <h2>Priority Planner</h2>
-        <p>You have <strong>10 points</strong> to distribute across the activities below. Think of each point as representing a portion of your attention and energy over the coming month. Allocate more points to activities you would actually prioritize. You can assign 0 to any item. Points must add up to exactly 10.</p>
+        <p>You have <strong>15 points</strong> to distribute across the activities below. Each point represents roughly 2 hours of your time and effort over the coming month. Allocate more points to activities you would prioritize. You can assign 0 to any item. Points must add up to exactly 15.</p>
       </div>
 
       <div class="budget-bar">
         <div class="budget-top">
           <span class="budget-label">Points remaining</span>
-          <span class="budget-count"><strong id="budgetRem">10</strong> of 10</span>
+          <span class="budget-count"><strong id="budgetRem">15</strong> of 15</span>
         </div>
         <div class="pip-row" id="pipRow"></div>
-        <div class="budget-hint" id="budgetHint">Assign all 10 points to continue.</div>
+        <div class="budget-hint" id="budgetHint">Assign all 15 points to continue.</div>
       </div>
 
       <div class="activity-grid" id="activityGrid"></div>
 
       <div class="continue-bar">
-        <span class="continue-hint" id="plannerHint">Assign all 10 points to continue</span>
-        <button class="btn-primary" id="submitBtn" disabled onclick="handleSubmit()">Submit →</button>
+        <span class="continue-hint" id="plannerHint">Assign all 15 points to continue</span>
+        <button class="btn-primary" id="submitBtn" disabled onclick="goToReflection()">Submit →</button>
+      </div>
+    </div>
+
+    <!-- Reflection page -->
+    <div class="page" id="page-reflection">
+      <div class="page-header">
+        <h2>Your Allocation</h2>
+        <p>Below is a summary of how you distributed your 15 points. Please answer the questions that follow.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Your Point Allocation</div>
+        </div>
+        <div class="card-body" id="reflectionSummary"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <p style="font-size:15px;line-height:1.6;color:var(--ink);margin-bottom:14px;font-weight:500;">In a few sentences, please explain the thinking behind how you distributed your points. Why did you prioritize the activities you did, and why did you deprioritize or give zero points to others?</p>
+          <textarea class="open-response-area" id="reflectionReasoning" placeholder="Share your reasoning here..." oninput="updateReflectionCount()"></textarea>
+          <div id="reflectionReasoningCount" style="font-size:12px;color:var(--ink-3);text-align:right;margin-top:6px;">0 / 20 characters minimum</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <p style="font-size:15px;line-height:1.6;color:var(--ink);margin-bottom:14px;font-weight:500;">Beyond the activities listed, what other actions, if any, would you consider taking in response to this announcement?</p>
+          <textarea class="open-response-area" id="reflectionOther" placeholder="Share your thoughts here (optional)..." oninput="updateReflectionCount()"></textarea>
+        </div>
+      </div>
+
+      <div class="continue-bar">
+        <span class="continue-hint" id="reflectionHint">Please answer both questions to continue</span>
+        <button class="btn-primary" id="reflectionSubmitBtn" disabled onclick="handleSubmit()">Submit →</button>
       </div>
     </div>
 
@@ -528,21 +564,26 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
 <script>
 // ── Config ──────────────────────────────────────────
 const QUALTRICS_RETURN_URL = "https://columbia.qualtrics.com/jfe/form/SV_88lQQha6Y1Z6ho2";
-const TOTAL   = 10;
-const N_PIPS  = 10;
+const TOTAL   = 15;
+const N_PIPS  = 15;
 const urlParams = new URLSearchParams(window.location.search);
 const CONDITION = urlParams.get("condition") || "high";
 const PID = urlParams.get("PROLIFIC_PID") || urlParams.get("pid") || "";
 
 // ── Actions — shuffled on load ───────────────────────
 const ACTIONS_BASE = [
-  { id:"preserve_erg",      bucket:"preserve",  text:"Attend upcoming employee resource group meetings or events." },
-  { id:"preserve_practice", bucket:"preserve",  text:"Take initiative to implement DEI in your own day-to-day practices." },
-  { id:"monitor_track",     bucket:"monitor",   text:"Track whether specific DEI-related programs continue operating in practice." },
-  { id:"monitor_manager",   bucket:"monitor",   text:"Ask your manager directly what will actually change following the announcement." },
-  { id:"challenge_manager", bucket:"challenge", text:"Raise concerns about the announcement directly with your manager or in a team meeting." },
-  { id:"withdraw_exit",     bucket:"withdraw",  text:"Update your resume and explore job opportunities at other organizations." },
-  { id:"donothing",         bucket:"donothing", text:"Continue your normal work routine without taking any specific action in response to the announcement." },
+  { id:"attend_erg",         text:"Attend at least one employee resource group meeting and/or event at Synertech over the next month." },
+  { id:"speak_up",           text:"Speak up when you notice a colleague is interrupted or overlooked in a meeting." },
+  { id:"advocate_hiring",    text:"Advocate for candidates from underrepresented groups during hiring and promotion discussions on your team." },
+  { id:"implement_dei",      text:"Implement DEI in your own day-to-day practices (e.g., ensuring all voices are heard, being intentional about inclusion, using inclusive language)." },
+  { id:"oppose_direction",   text:"Tell your manager or HR that you oppose Synertech's new direction on DEI." },
+  { id:"ask_changes",        text:"Ask your manager (or HR) what specifically will and will not change at Synertech as a result of the announcement." },
+  { id:"update_resume",      text:"Update your resume and apply to job opportunities at other organizations." },
+  { id:"support_direction",  text:"Tell your manager that you support Synertech's new direction on DEI." },
+  { id:"volunteer_implement",text:"Volunteer to help implement Synertech's new direction (e.g., serving on a transition committee, helping communicate the changes)." },
+  { id:"go_further",         text:"Tell your manager that the announcement does not go far enough in scaling back DEI practices at Synertech." },
+  { id:"public_callout",     text:"Publicly call attention to DEI-related practices that continue at Synertech following the announcement." },
+  { id:"private_monitor",    text:"Privately monitor whether DEI-related programs continue operating at Synertech following the announcement." },
 ];
 
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
@@ -876,7 +917,7 @@ function buildPlanner(){
         <button class="step-btn" id="minus_${a.id}" onclick="adj('${a.id}',-1)" disabled>−</button>
         <div class="stepper-track">
           <div class="stepper-fill" id="fill_${a.id}" style="width:0%"></div>
-          <div class="stepper-lbl" id="lbl_${a.id}">0 / 10</div>
+          <div class="stepper-lbl" id="lbl_${a.id}">0 / ${TOTAL}</div>
         </div>
         <button class="step-btn" id="plus_${a.id}" onclick="adj('${a.id}',1)">+</button>
       </div>`;
@@ -929,7 +970,7 @@ function refreshBudget(){
   const btn   = document.getElementById("submitBtn");
 
   if(total===TOTAL){
-    hint.textContent = "✓ All 10 points assigned.";
+    hint.textContent = "✓ All "+TOTAL+" points assigned.";
     hint.className = "budget-hint ok";
     btn.disabled = false;
     phint.textContent = "Ready to submit";
@@ -938,7 +979,7 @@ function refreshBudget(){
     hint.textContent = rem+" point"+(rem!==1?"s":"")+" left to assign.";
     hint.className = "budget-hint";
     btn.disabled = true;
-    phint.textContent = "Assign all 10 points to continue";
+    phint.textContent = "Assign all "+TOTAL+" points to continue";
     phint.style.color = "";
   }
 }
@@ -947,19 +988,86 @@ function refreshBudget(){
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx2on-aM9NElEhM4lJadiXIx760tEQlzh4fGt5KBw4RBpZydPMEKD2Q5YgvVT85PDuE/exec";
 const QUALTRICS_PART2_URL = "https://columbia.qualtrics.com/jfe/form/SV_9SmPaFoKrFRddfU";
 
+// ── Move from planner to reflection ──────────────────
+function goToReflection(){
+  if(getTotal()!==TOTAL) return;
+  // Build the allocation summary
+  buildReflectionSummary();
+  showPage("reflection");
+  // Reset reflection state
+  document.getElementById("reflectionReasoning").value = "";
+  document.getElementById("reflectionOther").value = "";
+  updateReflectionCount();
+}
+
+function buildReflectionSummary(){
+  const summary = document.getElementById("reflectionSummary");
+  // Sort: nonzero items first (highest to lowest), then zero items
+  const sorted = [...ACTIONS].sort((a,b)=>{
+    const va = values[a.id], vb = values[b.id];
+    if(va === vb) return 0;
+    return vb - va;
+  });
+  let html = '<div style="display:flex;flex-direction:column;gap:8px;">';
+  sorted.forEach(a=>{
+    const v = values[a.id];
+    const isZero = v === 0;
+    const bg = isZero ? "var(--surface-2)" : "var(--teal-soft)";
+    const border = isZero ? "var(--border)" : "var(--teal-pale)";
+    const ptColor = isZero ? "var(--ink-3)" : "var(--teal-dark)";
+    const textColor = isZero ? "var(--ink-3)" : "var(--ink)";
+    html += `<div style="display:flex;align-items:flex-start;gap:14px;padding:11px 14px;background:${bg};border:1px solid ${border};border-radius:var(--radius);">
+      <div style="font-size:20px;font-weight:600;color:${ptColor};min-width:36px;text-align:right;line-height:1.3;">${v}</div>
+      <div style="font-size:14px;line-height:1.55;color:${textColor};flex:1;">${a.text}</div>
+    </div>`;
+  });
+  html += '</div>';
+  summary.innerHTML = html;
+}
+
+// ── Reflection minimum (first question only) ─────────
+const REFLECTION_REASONING_MIN = 20;
+function updateReflectionCount(){
+  const r1 = document.getElementById("reflectionReasoning").value.trim();
+  const c1 = document.getElementById("reflectionReasoningCount");
+  const hint = document.getElementById("reflectionHint");
+  const btn  = document.getElementById("reflectionSubmitBtn");
+
+  c1.textContent = r1.length + " / " + REFLECTION_REASONING_MIN + " characters minimum";
+  c1.style.color = r1.length >= REFLECTION_REASONING_MIN ? "var(--green)" : "var(--ink-3)";
+
+  const ready = r1.length >= REFLECTION_REASONING_MIN;
+  btn.disabled = !ready;
+  if(ready){
+    hint.textContent = "Ready to submit";
+    hint.style.color = "var(--green)";
+  } else {
+    hint.textContent = "Please answer the first question to continue";
+    hint.style.color = "";
+  }
+}
+
+// ── Final submit ─────────────────────────────────────
 function handleSubmit(){
   if(getTotal()!==TOTAL) return;
 
   const openText = (document.getElementById("openResponseText")||{}).value||"";
   const mcVal = document.querySelector('input[name="mc_align"]:checked');
+  const reasoning = (document.getElementById("reflectionReasoning")||{}).value||"";
+  const other = (document.getElementById("reflectionOther")||{}).value||"";
 
-  const buckets = {};
-  ACTIONS.forEach(a=>{ buckets[a.bucket]=(buckets[a.bucket]||0)+values[a.id]; });
+  // Validate reflection responses meet minimums
+  if(reasoning.trim().length < REFLECTION_REASONING_MIN) return;
 
-  const data = { condition: CONDITION, PROLIFIC_PID: PID, open_response: openText.trim(),
-    mc_alignment: mcVal ? mcVal.value : "" };
-  ACTIONS.forEach(a=>{ data[a.id]=values[a.id]; data[a.id+"_bucket"]=a.bucket; });
-  Object.entries(buckets).forEach(([b,v])=>{ data["total_"+b]=v; });
+  const data = {
+    condition: CONDITION,
+    PROLIFIC_PID: PID,
+    open_response: openText.trim(),
+    mc_alignment: mcVal ? mcVal.value : "",
+    reflection_reasoning: reasoning.trim(),
+    reflection_other: other.trim()
+  };
+  ACTIONS.forEach(a=>{ data[a.id] = values[a.id]; });
 
   document.getElementById("app").style.display = "none";
   document.getElementById("completionScreen").classList.add("visible");
