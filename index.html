@@ -473,8 +473,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
       </div>
       <div class="card">
         <div class="card-body" style="font-size:15px;line-height:1.75;color:var(--ink);">
-          <p style="margin-bottom:14px;">On the next page, you will see a list of activities. You have <strong style="color:var(--teal-dark);">15 points</strong> to distribute across these activities. Each point represents roughly 2 hours of your time and effort over the coming month. So, 15 points reflects about 30 hours that you could devote to these activities over the next month.</p>
-          <p style="margin-bottom:14px;">Allocate <strong>more points</strong> to activities you would prioritize, and <strong>fewer points</strong> (or zero) to activities you would not. Your points must add up to exactly 15.</p>
+          <p style="margin-bottom:14px;">On the next page, you will see a list of activities. You have <strong style="color:var(--teal-dark);">10 points</strong> to distribute across these activities. Each point represents roughly 1 hour of your time and effort over the next week. So, 10 points reflects about 10 hours that you could devote to these activities over the next week.</p>
+          <p style="margin-bottom:14px;">Allocate <strong>more points</strong> to activities you would prioritize, and <strong>fewer points</strong> (or zero) to activities you would not. Your points must add up to exactly 10.</p>
           <p>Note that after allocating your points, you will be asked to briefly explain your reasoning for the activities you prioritized. Please allocate points only to activities you would genuinely prioritize, since you may be asked to describe how you would actually carry them out.</p>
         </div>
       </div>
@@ -487,22 +487,22 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
     <div class="page" id="page-planner">
       <div class="page-header">
         <h2>Priority Planner</h2>
-        <p>You have <strong>15 points</strong> to distribute across the activities below. Each point represents roughly 2 hours of your time and effort over the coming month. Allocate more points to activities you would prioritize. You can assign 0 to any item. Points must add up to exactly 15.</p>
+        <p>You have <strong>10 points</strong> to distribute across the activities below. Each point represents roughly 1 hour of your time and effort over the next week. Allocate more points to activities you would prioritize. You can assign 0 to any item. Points must add up to exactly 10.</p>
       </div>
 
       <div class="budget-bar">
         <div class="budget-top">
           <span class="budget-label">Points remaining</span>
-          <span class="budget-count"><strong id="budgetRem">15</strong> of 15</span>
+          <span class="budget-count"><strong id="budgetRem">10</strong> of 10</span>
         </div>
         <div class="pip-row" id="pipRow"></div>
-        <div class="budget-hint" id="budgetHint">Assign all 15 points to continue.</div>
+        <div class="budget-hint" id="budgetHint">Assign all 10 points to continue.</div>
       </div>
 
       <div class="activity-grid" id="activityGrid"></div>
 
       <div class="continue-bar">
-        <span class="continue-hint" id="plannerHint">Assign all 15 points to continue</span>
+        <span class="continue-hint" id="plannerHint">Assign all 10 points to continue</span>
         <button class="btn-primary" id="submitBtn" disabled onclick="goToReflection()">Submit →</button>
       </div>
     </div>
@@ -511,7 +511,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
     <div class="page" id="page-reflection">
       <div class="page-header">
         <h2>Your Allocation</h2>
-        <p>Below is a summary of how you distributed your 15 points. Please answer the questions that follow.</p>
+        <p>Below is a summary of how you distributed your 10 points. Please answer the questions that follow.</p>
       </div>
 
       <div class="card">
@@ -565,8 +565,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15p
 <script>
 // ── Config ──────────────────────────────────────────
 const QUALTRICS_RETURN_URL = "https://columbia.qualtrics.com/jfe/form/SV_88lQQha6Y1Z6ho2";
-const TOTAL   = 15;
-const N_PIPS  = 15;
+const TOTAL   = 10;
+const N_PIPS  = 10;
 const urlParams = new URLSearchParams(window.location.search);
 const CONDITION = urlParams.get("condition") || "high";
 const PID = urlParams.get("PROLIFIC_PID") || urlParams.get("pid") || "";
